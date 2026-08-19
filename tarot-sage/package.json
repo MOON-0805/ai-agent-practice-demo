@@ -1,0 +1,16 @@
+{
+  "name": "@aipy-pro/tarot-sage",
+  "version": "1.0.0",
+  "description": "🔮 灵犀智者 · 塔罗占卜 - 赛博空间的神秘塔罗解读者",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node server.js --test"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "openai": "^4.0.0",
+    "cors": "^2.8.5"
+  },
+  "keywords": ["tarot", "aipy", "embed-webview"]
+}

@@ -1,0 +1,20 @@
+{
+  "_meta": {"source": "local"},
+  "dxt_version": "0.1",
+  "name": "@aipy-pro/career-planner",
+  "display_name": "虚拟职业规划师",
+  "version": "2.0.0",
+  "description": "AI驱动的职业规划工具，支持差距分析、MBTI人格测试、霍兰德职业兴趣测试和综合分析，帮你规划职业发展路径",
+  "author": {"name": "AiPy"},
+  "icon": "icon.svg",
+  "server": {
+    "type": "node",
+    "entry_point": "server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server.js"],
+      "env": {}
+    }
+  },
+  "keywords": ["embed-webview"]
+}

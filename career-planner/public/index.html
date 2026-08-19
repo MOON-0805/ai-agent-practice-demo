@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>虚拟职业规划师</title>
+  <link rel="stylesheet" href="/style.css?v=2.4.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- 主题切换按钮 -->
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="切换主题">🌙</button>
+  
+  <!-- 移动端菜单按钮 -->
+  <button class="mobile-toggle" id="mobileToggle">☰</button>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  
+  <div class="app-layout">
+    <!-- 左侧功能栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo">
+          <span class="logo-icon">🧭</span>
+          <span>虚拟职业规划师</span>
+        </div>
+        <div class="slogan">AI驱动你的职业未来</div>
+      </div>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <button class="nav-link active" data-page="home" onclick="showPage('home')">
+            <span class="nav-icon">🏠</span>
+            <span>首页</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-page="gap" onclick="showPage('gap')">
+            <span class="nav-icon">📊</span>
+            <span>差距分析</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-page="analysis" onclick="showPage('analysis')">
+            <span class="nav-icon">🚀</span>
+            <span>职业综合分析</span>
+          </button>
+        </li>
+      </ul>
+    </aside>
+    
+    <!-- 主内容区 -->
+    <main class="main-content">
+      <!-- 首页（美化版） -->
+      <div class="page-container active" id="page-home">
+        <div id="errorBanner" class="error-banner"></div>
+        <div class="home-hero">
+          <div class="hero-bg">
+            <div class="hero-bubble b1"></div>
+            <div class="hero-bubble b2"></div>
+            <div class="hero-bubble b3"></div>
+            <div class="hero-bubble b4"></div>
+          </div>
+          <div class="hero-content">
+            <div class="hero-icon">🧭</div>
+            <h1 class="hero-title">虚拟职业规划师</h1>
+            <p class="hero-slogan">AI驱动你的职业未来</p>
+            <p class="hero-desc">专业AI职业规划工具，帮你分析差距、探索潜能、规划未来</p>
+            <div class="hero-actions">
+              <button class="btn hero-btn-primary" onclick="showPage('gap')">📊 开始差距分析</button>
+              <button class="btn hero-btn-secondary" onclick="showPage('analysis')">🚀 职业综合分析</button>
+            </div>
+          </div>
+        </div>
+        <div class="home-features">
+          <h2 class="home-section-title">✨ 核心功能</h2>
+          <div class="feature-grid">
+            <div class="feature-card" onclick="showPage('gap')">
+              <div class="feature-icon">📊</div>
+              <h3>差距分析</h3>
+              <p>上传简历或粘贴内容，AI分析你与目标岗位的差距，生成五维报告</p>
+              <div class="feature-tag">支持文件上传</div>
+            </div>
+            <div class="feature-card" onclick="showPage('analysis')">
+              <div class="feature-icon">🚀</div>
+              <h3>职业综合分析</h3>
+              <p>MBTI人格测试 + 霍兰德兴趣测试 + AI深度分析，规划5年职业路径</p>
+              <div class="feature-tag">三条差异化路径</div>
+            </div>
+          </div>
+        </div>
+        <div class="home-steps">
+          <h2 class="home-section-title">📋 使用流程</h2>
+          <div class="steps-row">
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-icon">📝</div>
+              <h4>填写信息</h4>
+              <p>填写基本信息或上传简历</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-icon">🤖</div>
+              <h4>AI分析</h4>
+              <p>AI深度分析你的职业状况</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-icon">📊</div>
+              <h4>获取报告</h4>
+              <p>获得专业职业发展报告</p>
+            </div>
+          </div>
+        </div>
+        <div class="home-stats">
+          <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">AI驱动</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">5年</div>
+            <div class="stat-label">职业规划</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">3条</div>
+            <div class="stat-label">发展路径</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">16型</div>
+            <div class="stat-label">MBTI人格</div>
+          </div>
+        </div>
+        <div class="home-cta">
+          <h3>准备好开启你的职业规划之旅了吗？</h3>
+          <p>立即开始，让AI帮你规划更清晰的职业未来</p>
+          <button class="btn hero-btn-primary" onclick="showPage('gap')">🚀 立即开始</button>
+        </div>
+      </div>
+      
+      <!-- 差距分析 -->
+      <div class="page-container" id="page-gap">
+        <div class="page-header">
+          <h2>📊 差距分析</h2>
+          <p class="page-desc">上传简历或粘贴内容，分析你与目标岗位的差距</p>
+        </div>
+        <div id="errorBanner-gap" class="error-banner"></div>
+        <div class="card">
+          <div class="card-title">📄 简历信息</div>
+          <div class="form-group">
+            <label>上传简历文件（支持Word/PDF）</label>
+            <div class="file-upload" id="fileUpload">
+              <div class="upload-icon">📁</div>
+              <div class="upload-text">
+                <strong>点击选择文件</strong> 或拖拽到此<br>
+                支持 .docx / .pdf 格式，最大10MB
+              </div>
+              <input type="file" id="resumeFile" accept=".docx,.pdf,.txt" onchange="handleFileSelect(this)">
+            </div>
+            <div class="hint">或直接粘贴简历内容到下方</div>
+          </div>
+          <div class="form-group">
+            <label for="resumeInput">📝 粘贴简历全文</label>
+            <textarea id="resumeInput" placeholder="在此粘贴你的简历内容..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="jdInput">🎯 目标岗位JD</label>
+            <textarea id="jdInput" placeholder="在此粘贴目标岗位的职位描述..."></textarea>
+          </div>
+          <button id="analyzeBtn" class="btn btn-block">开始分析</button>
+          <div id="loadingOverlay-gap" class="loading-overlay">
+            <div class="spinner"></div>
+            <p class="loading-text">AI正在分析差距，请稍候...</p>
+          </div>
+        </div>
+        <div id="resultArea-gap" class="result-area" style="display:none;">
+          <div class="card">
+            <div class="card-title">📋 差距分析报告</div>
+            <div id="exportButtons-gap"></div>
+            <div id="resultContent-gap" class="result-content"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 职业综合分析 -->
+      <div class="page-container" id="page-analysis">
+        <div class="page-header">
+          <h2>🚀 职业综合分析</h2>
+          <p class="page-desc">结合MBTI人格测试、霍兰德职业兴趣测试和AI分析，全面规划你的职业发展</p>
+        </div>
+        <div id="errorBanner-analysis" class="error-banner"></div>
+        <div class="step-badges" id="analysisSteps">
+          <span class="step-badge active" data-step="1">① 基本信息</span>
+          <span class="step-badge" data-step="2">② MBTI测试</span>
+          <span class="step-badge" data-step="3">③ 霍兰德测试</span>
+          <span class="step-badge" data-step="4">④ 职业探索</span>
+          <span class="step-badge" data-step="5">⑤ AI分析</span>
+        </div>
+        <div class="card" id="step1">
+          <div class="card-title">📝 基本信息</div>
+          <div class="form-group">
+            <label for="ageInput">🎂 年龄</label>
+            <input type="number" id="ageInput" placeholder="请输入你的年龄" min="16" max="70">
+          </div>
+          <div class="form-group">
+            <label for="industryInput">🏭 行业</label>
+            <input type="text" id="industryInput" placeholder="例如：互联网、金融、教育、制造业...">
+          </div>
+          <div class="form-group">
+            <label for="positionInput">💼 当前岗位</label>
+            <input type="text" id="positionInput" placeholder="例如：软件工程师、市场专员、会计...">
+          </div>
+          <div class="form-group">
+            <label>🛠️ 核心技能（至少添加3项，输入后按回车确认）</label>
+            <div class="skill-input-container" id="skillContainer">
+              <input type="text" class="skill-input" id="skillInput" placeholder="输入技能后按回车...">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="goalInput">🎯 职业目标（选填）</label>
+            <input type="text" id="goalInput" placeholder="例如：5年内成为技术总监、创业、转型...">
+          </div>
+          <button class="btn btn-block" onclick="goToStep(2)">下一步：MBTI测试 →</button>
+        </div>
+        <div class="card" id="step2" style="display:none;">
+          <div class="card-title">🧠 MBTI人格测试</div>
+          <div class="test-container">
+            <div class="test-progress">
+              <span class="progress-text" id="mbtiProgress">第 1/20 题</span>
+              <div class="progress-bar">
+                <div class="progress-fill" id="mbtiProgressFill" style="width: 5%"></div>
+              </div>
+            </div>
+            <div class="test-question">
+              <p class="q-text" id="mbtiQuestion"></p>
+              <div class="test-options" id="mbtiOptions"></div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+              <button class="btn btn-secondary" id="mbtiPrevBtn" onclick="mbtiPrev()">上一步</button>
+              <button class="btn" id="mbtiNextBtn" onclick="mbtiNext()">下一题 →</button>
+            </div>
+          </div>
+        </div>
+        <div class="card" id="step3" style="display:none;">
+          <div class="card-title">🎨 霍兰德职业兴趣测试</div>
+          <div class="test-container">
+            <div class="test-progress">
+              <span class="progress-text" id="hollandProgress">第 1/6 题</span>
+              <div class="progress-bar">
+                <div class="progress-fill" id="hollandProgressFill" style="width: 16%"></div>
+              </div>
+            </div>
+            <div class="test-question">
+              <p class="q-text" id="hollandQuestion"></p>
+              <div class="test-options" id="hollandOptions"></div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+              <button class="btn btn-secondary" id="hollandPrevBtn" onclick="hollandPrev()">上一步</button>
+              <button class="btn" id="hollandNextBtn" onclick="hollandNext()">下一题 →</button>
+            </div>
+          </div>
+        </div>
+        <div class="card" id="step4" style="display:none;">
+          <div class="card-title">🎯 职业探索问卷</div>
+          <div class="test-container">
+            <div class="test-progress">
+              <span class="progress-text" id="radarProgress">第 1/5 题</span>
+              <div class="progress-bar">
+                <div class="progress-fill" id="radarProgressFill" style="width: 20%"></div>
+              </div>
+            </div>
+            <div class="test-question">
+              <p class="q-text" id="radarQuestion"></p>
+              <div class="form-group">
+                <textarea id="radarAnswer" placeholder="请输入你的回答..." style="min-height: 120px;"></textarea>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+              <button class="btn btn-secondary" id="radarPrevBtn" onclick="radarPrev()">上一步</button>
+              <button class="btn" id="radarNextBtn" onclick="radarNext()">下一题 →</button>
+            </div>
+          </div>
+        </div>
+        <div class="card" id="step5" style="display:none;">
+          <div class="card-title">🤖 AI综合分析</div>
+          <div id="analysisResult" style="margin-bottom: 20px;"></div>
+          <button id="runAnalysisBtn" class="btn btn-block">开始AI分析</button>
+          <div id="loadingOverlay-analysis" class="loading-overlay">
+            <div class="spinner"></div>
+            <p class="loading-text">AI正在综合分析你的职业发展路径，请稍候...</p>
+          </div>
+        </div>
+        <div id="resultArea-analysis" class="result-area" style="display:none;">
+          <div class="card">
+            <div class="card-title">📋 综合职业发展报告</div>
+            <div id="exportButtons-analysis"></div>
+            <div id="resultContent-analysis" class="result-content"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 报告展示页面 -->
+      <div class="page-container" id="page-report">
+        <div class="report-toolbar">
+          <div class="report-title" id="reportTitle">📋 AI分析报告</div>
+          <div class="report-actions">
+            <button class="btn btn-secondary btn-sm" id="reportBackBtn" onclick="closeReport()">← 返回</button>
+            <button class="btn btn-secondary btn-sm" id="reportRegenBtn" onclick="regenerateReport()">🔄 重新生成</button>
+          </div>
+        </div>
+        <div id="errorBanner-report" class="error-banner"></div>
+        <div class="card report-card">
+          <div id="exportButtons-report"></div>
+          <div id="reportContent" class="result-content report-content"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="/common.js?v=2.4.0"></script>
+  <script src="/app.js?v=2.4.0"></script>
+</body>
+</html>

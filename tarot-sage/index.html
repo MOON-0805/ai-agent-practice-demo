@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🔮 灵犀智者 · 塔罗占卜</title>
+<style>
+  :root {
+    --bg-primary: #0d001a;
+    --bg-secondary: #1a0a2e;
+    --bg-card: #2d1b4e;
+    --text-primary: #e2d5f0;
+    --text-secondary: #a78bfa;
+    --accent: #c084fc;
+    --accent-glow: #7c3aed;
+    --border: #4a1a6e;
+    --error: #ef4444;
+    --success: #22c55e;
+  }
+  .light-theme {
+    --bg-primary: #f5f0ff;
+    --bg-secondary: #ede5ff;
+    --bg-card: #ffffff;
+    --text-primary: #1a1a2e;
+    --text-secondary: #7c3aed;
+    --accent: #7c3aed;
+    --accent-glow: #a78bfa;
+    --border: #d4c4f0;
+    --error: #dc2626;
+    --success: #16a34a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Georgia', 'Noto Serif SC', serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.5s, color 0.5s;
+  }
+  #stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+  .star {
+    position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%;
+    animation: twinkle var(--duration) ease-in-out infinite; opacity: 0;
+  }
+  @keyframes twinkle { 0%,100%{opacity:0} 50%{opacity:var(--max-opacity,0.8)} }
+  #themeToggle {
+    position: fixed; top: 15px; right: 15px; z-index: 100;
+    background: var(--bg-card); border: 1px solid var(--border);
+    color: var(--accent); width: 40px; height: 40px;
+    border-radius: 50%; cursor: pointer; font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s; box-shadow: 0 0 15px rgba(124,58,237,0.3);
+  }
+  #themeToggle:hover { transform: scale(1.1); box-shadow: 0 0 25px rgba(124,58,237,0.5); }
+  .container { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 20px; }
+  .header { text-align: center; padding: 30px 0 20px; }
+  .header h1 { font-size: 2.2em; color: var(--accent); text-shadow: 0 0 20px rgba(192,132,252,0.5); margin-bottom: 10px; }
+  .header p { color: var(--text-secondary); font-size: 1.1em; }
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 25px; margin-bottom: 20px;
+    backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .card-title { font-size: 1.3em; color: var(--accent); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; margin-bottom: 6px; color: var(--text-secondary); font-size: 0.95em; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 10px 14px;
+    background: var(--bg-secondary); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text-primary);
+    font-size: 1em; font-family: inherit; transition: border-color 0.3s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none; border-color: var(--accent); box-shadow: 0 0 10px rgba(192,132,252,0.3);
+  }
+  .form-group textarea { resize: vertical; min-height: 60px; }
+  .form-group select { cursor: pointer; }
+  .form-group select option { background: var(--bg-secondary); color: var(--text-primary); }
+  .style-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  .style-btn {
+    flex: 1; min-width: 100px; padding: 10px;
+    background: var(--bg-secondary); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text-primary); cursor: pointer;
+    text-align: center; transition: all 0.3s; font-size: 0.95em;
+  }
+  .style-btn:hover { border-color: var(--accent); }
+  .style-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 0 15px rgba(192,132,252,0.4); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 28px; border: none; border-radius: 12px;
+    font-size: 1.05em; font-family: inherit; cursor: pointer;
+    transition: all 0.3s; font-weight: bold;
+  }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-glow)); color: #fff; box-shadow: 0 4px 15px rgba(124,58,237,0.4); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(124,58,237,0.6); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-secondary { background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--accent); }
+  .btn-success { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; box-shadow: 0 4px 15px rgba(34,197,94,0.4); }
+  .btn-success:hover { transform: translateY(-2px); }
+  .btn-group { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px; }
+  .overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); z-index: 200;
+    justify-content: center; align-items: center;
+  }
+  .overlay.show { display: flex; }
+  .overlay-content {
+    background: var(--bg-card); border: 1px solid var(--accent);
+    border-radius: 20px; padding: 40px; max-width: 450px;
+    text-align: center; box-shadow: 0 0 50px rgba(192,132,252,0.3);
+    animation: fadeInUp 0.5s ease;
+  }
+  @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  .overlay-content h2 { color: var(--accent); margin-bottom: 15px; font-size: 1.5em; }
+  .overlay-content p { color: var(--text-secondary); margin-bottom: 10px; line-height: 1.6; }
+  .overlay-content .ritual-icon { font-size: 4em; margin-bottom: 15px; display: block; }
+  .overlay-content .countdown { font-size: 2em; color: var(--accent); margin: 15px 0; }
+  #shuffleSection { display: none; text-align: center; padding: 60px 20px; }
+  #shuffleSection.show { display: block; }
+  .shuffle-animation {
+    width: 80px; height: 120px; margin: 20px auto;
+    background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+    border-radius: 8px; animation: shufflePulse 0.5s ease-in-out infinite alternate;
+    display: flex; align-items: center; justify-content: center; font-size: 2em; color: #fff;
+  }
+  @keyframes shufflePulse { 0%{transform:translateY(0) rotate(-5deg)} 100%{transform:translateY(-15px) rotate(5deg)} }
+  #shuffleSection h2 { color: var(--accent); margin-bottom: 10px; }
+  #shuffleSection p { color: var(--text-secondary); }
+  #loadingSection { display: none; text-align: center; padding: 40px 20px; }
+  #loadingSection.show { display: block; }
+  .loading-spinner {
+    width: 50px; height: 50px; margin: 20px auto;
+    border: 3px solid var(--border); border-top: 3px solid var(--accent);
+    border-radius: 50%; animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  #resultSection { display: none; }
+  #resultSection.show { display: block; }
+  .cards-display { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
+  .tarot-card {
+    width: 200px; background: var(--bg-secondary);
+    border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; transition: all 0.5s; animation: cardFlip 0.6s ease;
+  }
+  .tarot-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(192,132,252,0.3); }
+  @keyframes cardFlip { 0%{transform:rotateY(180deg) scale(0.8);opacity:0} 100%{transform:rotateY(0deg) scale(1);opacity:1} }
+  .tarot-card .card-art { width: 100%; height: 280px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--bg-primary); }
+  .tarot-card .card-art img { width: 100%; height: 100%; object-fit: cover; }
+  .tarot-card .card-info { padding: 12px; text-align: center; }
+  .tarot-card .card-info .card-name { font-size: 1.1em; color: var(--accent); font-weight: bold; }
+  .tarot-card .card-info .card-position { font-size: 0.85em; color: var(--text-secondary); margin: 4px 0; }
+  .tarot-card .card-info .card-orientation { font-size: 0.9em; padding: 2px 10px; border-radius: 10px; display: inline-block; margin-top: 4px; }
+  .tarot-card .card-info .card-orientation.upright { background: rgba(34,197,94,0.2); color: #22c55e; }
+  .tarot-card .card-info .card-orientation.reversed { background: rgba(239,68,68,0.2); color: #ef4444; }
+  .tarot-card.reversed .card-art img { transform: rotate(180deg); }
+  .reading-content {
+    background: var(--bg-secondary); border-left: 4px solid var(--accent);
+    border-radius: 12px; padding: 25px; margin: 20px 0;
+    line-height: 1.9; white-space: pre-wrap; font-size: 1em;
+  }
+  #errorSection { display: none; text-align: center; padding: 40px 20px; }
+  #errorSection.show { display: block; }
+  .error-icon { font-size: 4em; margin-bottom: 15px; }
+  .error-message { color: var(--error); margin-bottom: 15px; }
+  .mode-badge { display: inline-block; background: rgba(192,132,252,0.15); color: var(--accent); padding: 4px 12px; border-radius: 20px; font-size: 0.8em; margin-bottom: 10px; }
+  .required::after { content: ' *'; color: var(--error); }
+  .field-error { border-color: var(--error) !important; box-shadow: 0 0 10px rgba(239,68,68,0.3) !important; }
+  .error-text { color: var(--error); font-size: 0.85em; margin-top: 4px; display: none; }
+  .error-text.show { display: block; }
+  #pickCardsSection { display: none; }
+  #pickCardsSection.show { display: block; }
+  .pick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px; margin: 15px 0; max-height: 500px; overflow-y: auto;
+    padding: 10px; background: var(--bg-secondary); border-radius: 12px;
+  }
+  .pick-card {
+    aspect-ratio: 2/3; background: var(--bg-primary);
+    border: 2px solid var(--border); border-radius: 8px; cursor: pointer;
+    transition: all 0.3s; position: relative; display: flex;
+    align-items: center; justify-content: center; font-size: 2em; overflow: hidden;
+  }
+  .pick-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(192,132,252,0.3); }
+  .pick-card.selected { border-color: var(--success); box-shadow: 0 0 15px rgba(34,197,94,0.4); transform: translateY(-5px); }
+  .pick-card .pick-check {
+    position: absolute; top: 3px; right: 3px; width: 20px; height: 20px;
+    background: var(--success); border-radius: 50%; display: none;
+    align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: bold;
+  }
+  .pick-card.selected .pick-check { display: flex; }
+  .pick-card img { width: 100%; height: 100%; object-fit: cover; }
+  .pick-card .card-back {
+    width: 100%; height: 100%; background: linear-gradient(135deg, #4a1a6e, #2d1b4e);
+    display: flex; align-items: center; justify-content: center; font-size: 2em;
+  }
+  .pick-card.flipped img { display: block; }
+  .pick-card.flipped .card-back { display: none; }
+  .pick-card:not(.flipped) img { display: none; }
+  .pick-card:not(.flipped) .card-back { display: flex; }
+  .pick-counter { text-align: center; color: var(--text-secondary); margin: 10px 0; font-size: 0.95em; }
+  #particleCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+  @media (max-width: 768px) {
+    .container { padding: 10px; }
+    .header h1 { font-size: 1.6em; }
+    .tarot-card { width: 150px; }
+    .tarot-card .card-art { height: 210px; }
+    .style-group { flex-direction: column; }
+    .style-btn { min-width: auto; }
+    .btn-group { flex-direction: column; }
+    .btn { width: 100%; }
+    .pick-grid { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); }
+  }
+  @media (max-width: 480px) {
+    .tarot-card { width: 130px; }
+    .tarot-card .card-art { height: 180px; }
+    .overlay-content { margin: 20px; padding: 25px; }
+    .pick-grid { grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 5px; }
+  }
+  .hidden { display: none !important; }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg-primary); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<canvas id="particleCanvas"></canvas>
+<button id="themeToggle" onclick="toggleTheme()" title="切换主题">🌙</button>
+<div class="container">
+  <div id="welcomeSection" class="header">
+    <h1>🔮 灵犀智者</h1>
+    <p>赛博空间的神秘塔罗解读者</p>
+    <p style="color:var(--text-secondary);font-size:0.9em;margin-top:5px;">🌙 韦特塔罗78张牌 · 灵犀通灵占卜 🌙</p>
+    <div id="modeIndicator" class="mode-badge" style="margin-top:10px;">🔮 灵犀已通 · 天机可测</div>
+  </div>
+  <div id="formSection" class="card">
+    <div class="card-title">📋 占卜设置</div>
+    <div class="form-group">
+      <label>解读风格</label>
+      <div class="style-group" id="styleGroup">
+        <button class="style-btn active" data-style="friend" onclick="setStyle('friend')">🤝 朋友闲聊</button>
+        <button class="style-btn" data-style="mentor" onclick="setStyle('mentor')">🧙 人生导师</button>
+        <button class="style-btn" data-style="sharp" onclick="setStyle('sharp')">⚡ 犀利直给</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>占卜模式</label>
+      <select id="modeSelect" onchange="onModeChange()">
+        <option value="detailed">📜 详细占卜</option>
+        <option value="quick">⚡ 快捷占卜</option>
+        <option value="daily">🌅 今日运势</option>
+      </select>
+    </div>
+    <div class="form-group" id="spreadGroup">
+      <label>牌阵选择</label>
+      <select id="spreadSelect">
+        <option value="body-mind-spirit">🧘 身·心·灵</option>
+        <option value="situation-obstacle-outcome">🛤️ 现状·阻碍·出路</option>
+        <option value="you-them-us">💑 你·TA·我们</option>
+        <option value="yesterday-today-tomorrow">⏳ 昨日·今日·明日</option>
+      </select>
+    </div>
+    <div class="form-group" id="questionGroup">
+      <label class="required">你的问题</label>
+      <textarea id="questionInput" placeholder="请输入你想问的问题，我会结合塔罗牌为你详细解读……" maxlength="200"></textarea>
+      <div class="error-text" id="questionError">请先输入你的问题</div>
+    </div>
+    <div class="form-group">
+      <label>你的星座（可选）</label>
+      <select id="zodiacSelect">
+        <option value="">—— 请选择 ——</option>
+        <option value="白羊座">♈ 白羊座 (3.21-4.19)</option>
+        <option value="金牛座">♉ 金牛座 (4.20-5.20)</option>
+        <option value="双子座">♊ 双子座 (5.21-6.21)</option>
+        <option value="巨蟹座">♋ 巨蟹座 (6.22-7.22)</option>
+        <option value="狮子座">♌ 狮子座 (7.23-8.22)</option>
+        <option value="处女座">♍ 处女座 (8.23-9.22)</option>
+        <option value="天秤座">♎ 天秤座 (9.23-10.23)</option>
+        <option value="天蝎座">♏ 天蝎座 (10.24-11.22)</option>
+        <option value="射手座">♐ 射手座 (11.23-12.21)</option>
+        <option value="摩羯座">♑ 摩羯座 (12.22-1.19)</option>
+        <option value="水瓶座">♒ 水瓶座 (1.20-2.18)</option>
+        <option value="双鱼座">♓ 双鱼座 (2.19-3.20)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>当前心情（可选）</label>
+      <select id="moodSelect">
+        <option value="">—— 请选择 ——</option>
+        <option value="平静">😌 平静</option>
+        <option value="快乐">😊 快乐</option>
+        <option value="焦虑">😰 焦虑</option>
+        <option value="悲伤">😢 悲伤</option>
+        <option value="愤怒">😠 愤怒</option>
+        <option value="期待">🤩 期待</option>
+        <option value="迷茫">😕 迷茫</option>
+        <option value="感恩">🙏 感恩</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="beginRitual()" style="width:100%;margin-top:10px;">
+      🔮 开始占卜
+    </button>
+  </div>
+  <div id="ritualOverlay" class="overlay">
+    <div class="overlay-content">
+      <span class="ritual-icon">🌙</span>
+      <h2>静心连接</h2>
+      <p>请闭上双眼，深呼吸三次……</p>
+      <p>在心中默念你的问题，感受宇宙的能量。</p>
+      <p>当你准备好时，占卜将自动开始。</p>
+      <div class="countdown" id="countdown">3</div>
+      <p style="font-size:0.85em;color:var(--text-secondary);">✨ 正在连接宇宙能量 ✨</p>
+    </div>
+  </div>
+  <div id="shuffleSection">
+    <div class="shuffle-animation">🃏</div>
+    <h2>🔮 洗牌中……</h2>
+    <p>塔罗牌正在宇宙能量中流转</p>
+  </div>
+  <div id="pickCardsSection" class="card">
+    <div class="card-title">🃏 请选择三张牌 <span style="font-size:0.7em;color:var(--text-secondary);">（已选: <span id="pickCount">0</span>/3）</span></div>
+    <p style="color:var(--text-secondary);font-size:0.9em;margin-bottom:10px;">点击牌面选择你心仪的塔罗牌，选满三张后点击确认</p>
+    <div class="pick-grid" id="pickGrid"></div>
+    <div class="pick-counter" id="pickCounter">请选择3张塔罗牌</div>
+    <button class="btn btn-primary" id="confirmPickBtn" onclick="confirmPick()" disabled style="width:100%;">✅ 确认选牌（0/3）</button>
+  </div>
+  <div id="loadingSection">
+    <div class="loading-spinner"></div>
+    <h2>🔮 通灵解读中……</h2>
+    <p>灵犀智者正在连接宇宙能量，解读星辰的讯息……</p>
+  </div>
+  <div id="errorSection" class="card">
+    <div class="error-icon">😔</div>
+    <h2 class="error-message" id="errorMessage">占卜过程中出现了一些问题</h2>
+    <button class="btn btn-primary" onclick="retryReading()">🔄 重新占卜</button>
+  </div>
+  <div id="resultSection">
+    <div class="card">
+      <div class="card-title">🔮 占卜结果</div>
+      <div id="resultMeta" style="text-align:center;margin-bottom:15px;color:var(--text-secondary);font-size:0.9em;"></div>
+      <div class="cards-display" id="cardsDisplay"></div>
+      <div class="reading-content" id="readingContent"></div>
+      <div class="btn-group">
+        <button class="btn btn-success" onclick="downloadReport()">📥 下载报告</button>
+        <button class="btn btn-primary" onclick="redraw()">🔄 重新占卜</button>
+        <button class="btn btn-secondary" onclick="goBack()">🏠 返回首页</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+// ============ 全局变量 ============
+var currentStyle = 'friend';
+var currentResult = null;
+var pickedCards = [];
+var allCardsData = [];
+var particleAnimId = null;
+// ============ AI API 配置 ============
+var AI_CONFIG = {
+  baseURL: 'https://api.trustoken.cn/v1',
+  apiKey: '{{API_KEY}}',
+  model: 'auto'
+};
+// ============ 塔罗牌数据 ============
+var TAROT_CARDS = [
+  {id:1,name:'愚人',type:'major',number:0,element:'风',keywords:'开始、冒险、天真、自由',meaning_upright:'新的开始，充满无限可能。放下过去，勇敢迈出第一步。',meaning_reversed:'鲁莽行事，冒险冲动，需要三思而后行。'},
+  {id:2,name:'魔术师',type:'major',number:1,element:'水',keywords:'创造、技能、自信、资源',meaning_upright:'你拥有实现目标所需的一切资源。发挥你的创造力。',meaning_reversed:'才华被埋没，缺乏方向，需要重新审视自己的才能。'},
+  {id:3,name:'女祭司',type:'major',number:2,element:'水',keywords:'直觉、智慧、神秘、内在',meaning_upright:'倾听内心的声音，答案就在你的潜意识中。',meaning_reversed:'忽视直觉，表面化，需要深入探索内心。'},
+  {id:4,name:'女皇',type:'major',number:3,element:'土',keywords:'丰收、滋养、美丽、自然',meaning_upright:'丰饶与收获，享受生活的美好，母性的关怀。',meaning_reversed:'创造力受阻，过度依赖他人，需要独立自主。'},
+  {id:5,name:'皇帝',type:'major',number:4,element:'火',keywords:'权威、稳定、领导、父亲',meaning_upright:'建立秩序与规则，用理性与权威掌控局面。',meaning_reversed:'专制独裁，缺乏灵活性，需要放下控制欲。'},
+  {id:6,name:'教皇',type:'major',number:5,element:'土',keywords:'传统、信仰、教导、指引',meaning_upright:'寻求精神指引，遵循传统智慧，向长者学习。',meaning_reversed:'打破常规，质疑权威，需要找到自己的信仰。'},
+  {id:7,name:'恋人',type:'major',number:6,element:'风',keywords:'爱情、选择、结合、和谐',meaning_upright:'重要的关系或选择，跟随内心做出决定。',meaning_reversed:'关系失衡，选择困难，需要重新评估价值观。'},
+  {id:8,name:'战车',type:'major',number:7,element:'水',keywords:'胜利、意志、决心、征服',meaning_upright:'凭借强大的意志力克服困难，取得胜利。',meaning_reversed:'缺乏方向，冲突加剧，需要调整策略。'},
+  {id:9,name:'力量',type:'major',number:8,element:'火',keywords:'勇气、力量、耐心、温柔',meaning_upright:'内在的力量与勇气，用温柔而非暴力解决问题。',meaning_reversed:'软弱无力，缺乏自信，需要找回内在的力量。'},
+  {id:10,name:'隐士',type:'major',number:9,element:'土',keywords:'内省、智慧、孤独、指引',meaning_upright:'独处与反思，寻找内在的智慧与真理。',meaning_reversed:'孤立无援，拒绝帮助，需要走出孤独。'},
+  {id:11,name:'命运之轮',type:'major',number:10,element:'火',keywords:'变化、循环、命运、机遇',meaning_upright:'命运的转折点，好运即将到来，抓住机遇。',meaning_reversed:'厄运循环，抗拒改变，需要接受命运的安排。'},
+  {id:12,name:'正义',type:'major',number:11,element:'风',keywords:'公平、真相、法律、平衡',meaning_upright:'公正的裁决，真相大白，因果报应。',meaning_reversed:'不公对待，逃避责任，需要诚实面对。'},
+  {id:13,name:'倒吊人',type:'major',number:12,element:'水',keywords:'牺牲、等待、换位、觉悟',meaning_upright:'以退为进，换位思考，从不同角度看问题。',meaning_reversed:'无谓的牺牲，拖延不决，需要停止自我折磨。'},
+  {id:14,name:'死神',type:'major',number:13,element:'水',keywords:'结束、转变、重生、放下',meaning_upright:'旧事物的结束，新生的开始，放下过去。',meaning_reversed:'抗拒改变，停滞不前，需要接受必然的转变。'},
+  {id:15,name:'节制',type:'major',number:14,element:'火',keywords:'平衡、适度、调和、耐心',meaning_upright:'保持平衡与适度，调和矛盾，耐心等待。',meaning_reversed:'失衡极端，缺乏耐心，需要找回平衡。'},
+  {id:16,name:'恶魔',type:'major',number:15,element:'土',keywords:'束缚、欲望、沉迷、物质',meaning_upright:'被欲望束缚，沉迷物质，需要摆脱枷锁。',meaning_reversed:'觉醒与解脱，摆脱不良习惯，重获自由。'},
+  {id:17,name:'高塔',type:'major',number:16,element:'火',keywords:'剧变、崩塌、觉醒、重建',meaning_upright:'突如其来的变故，打破旧有结构，重建新生。',meaning_reversed:'避免灾难，抗拒改变，需要提前预警。'},
+  {id:18,name:'星星',type:'major',number:17,element:'风',keywords:'希望、灵感、平静、治愈',meaning_upright:'充满希望与灵感，心灵得到治愈，宁静致远。',meaning_reversed:'失去希望，信心不足，需要重新点燃信念。'},
+  {id:19,name:'月亮',type:'major',number:18,element:'水',keywords:'幻觉、恐惧、潜意识、不安',meaning_upright:'面对内心的恐惧与幻觉，探索潜意识。',meaning_reversed:'看清真相，克服恐惧，走出迷雾。'},
+  {id:20,name:'太阳',type:'major',number:19,element:'火',keywords:'成功、快乐、活力、成就',meaning_upright:'光明与成功，充满活力与喜悦，一切皆美好。',meaning_reversed:'暂时的挫折，快乐被遮蔽，需要重新寻找光明。'},
+  {id:21,name:'审判',type:'major',number:20,element:'火',keywords:'觉醒、重生、审判、召唤',meaning_upright:'内心的觉醒，接受召唤，重新开始。',meaning_reversed:'自我怀疑，拒绝改变，需要倾听内心的声音。'},
+  {id:22,name:'世界',type:'major',number:21,element:'土',keywords:'完成、圆满、旅行、成就',meaning_upright:'圆满的完成，一个周期的结束，获得成就。',meaning_reversed:'未完成的任务，需要补全，拖延的结局。'},
+  {id:23,name:'宝剑二',type:'minor',suit:'宝剑',number:2,element:'风',keywords:'抉择、僵局、平衡、逃避',meaning_upright:'面临艰难的抉择，需要做出决定。',meaning_reversed:'信息不足，过度分析，需要放下防备。'},
+  {id:24,name:'宝剑三',type:'minor',suit:'宝剑',number:3,element:'风',keywords:'心痛、悲伤、失落、伤害',meaning_upright:'心碎与悲伤，情感上的痛苦需要面对。',meaning_reversed:'从伤痛中恢复，释放负面情绪，开始疗愈。'},
+  {id:25,name:'宝剑四',type:'minor',suit:'宝剑',number:4,element:'风',keywords:'休息、恢复、沉思、安宁',meaning_upright:'需要休息与恢复，给自己充电的时间。',meaning_reversed:'无法安宁，过度劳累，需要强制休息。'},
+  {id:26,name:'宝剑五',type:'minor',suit:'宝剑',number:5,element:'风',keywords:'冲突、失败、损失、屈辱',meaning_upright:'冲突与争执，即使赢了也是输家。',meaning_reversed:'和解与修复，放下过去，重新开始。'},
+  {id:27,name:'宝剑六',type:'minor',suit:'宝剑',number:6,element:'风',keywords:'过渡、疗愈、旅程、放下',meaning_upright:'渡过难关，走向平静，带着伤痛前行。',meaning_reversed:'无法释怀，被困在过去，需要勇敢前行。'},
+  {id:28,name:'宝剑七',type:'minor',suit:'宝剑',number:7,element:'风',keywords:'策略、欺骗、偷窃、计划',meaning_upright:'需要策略与计谋，小心被人欺骗。',meaning_reversed:'谎言被揭穿，计划失败，需要诚实面对。'},
+  {id:29,name:'宝剑八',type:'minor',suit:'宝剑',number:8,element:'风',keywords:'束缚、困境、限制、无助',meaning_upright:'感到被困住，自我设限，需要打破思维牢笼。',meaning_reversed:'获得自由，看清真相，走出困境。'},
+  {id:30,name:'宝剑九',type:'minor',suit:'宝剑',number:9,element:'风',keywords:'噩梦、焦虑、恐惧、失眠',meaning_upright:'深夜的焦虑与恐惧，被噩梦困扰。',meaning_reversed:'克服恐惧，寻求帮助，从焦虑中走出。'},
+  {id:31,name:'宝剑十',type:'minor',suit:'宝剑',number:10,element:'风',keywords:'结束、痛苦、绝望、重生',meaning_upright:'最黑暗的时刻，但也是新生的开始。',meaning_reversed:'否极泰来，从绝望中重生，看到希望。'},
+  {id:32,name:'宝剑国王',type:'minor',suit:'宝剑',number:11,element:'风',keywords:'理性、权威、分析、公正',meaning_upright:'理性的决策者，用智慧与公正领导。',meaning_reversed:'滥用权力，冷酷无情，需要更多同理心。'},
+  {id:33,name:'宝剑骑士',type:'minor',suit:'宝剑',number:12,element:'风',keywords:'冲动、快速、行动、辩论',meaning_upright:'快速行动，但容易冲动，需要三思而行。',meaning_reversed:'鲁莽行事，计划失败，需要放慢脚步。'},
+  {id:34,name:'宝剑侍者',type:'minor',suit:'宝剑',number:13,element:'风',keywords:'好奇、观察、沟通、警觉',meaning_upright:'保持好奇心，善于观察与沟通。',meaning_reversed:'八卦闲话，沟通不畅，需要谨慎言行。'},
+  {id:35,name:'宝剑女王',type:'minor',suit:'宝剑',number:14,element:'风',keywords:'独立、洞察、智慧、悲伤',meaning_upright:'独立的思考者，拥有敏锐的洞察力。',meaning_reversed:'过度批判，冷漠无情，需要打开心扉。'},
+  {id:36,name:'宝剑王牌',type:'minor',suit:'宝剑',number:1,element:'风',keywords:'突破、真相、胜利、清晰',meaning_upright:'新的想法与突破，真相大白，获得胜利。',meaning_reversed:'混乱与误解，计划受阻，需要重新审视。'},
+  {id:38,name:'权杖二',type:'minor',suit:'权杖',number:2,element:'火',keywords:'计划、决定、未来、选择',meaning_upright:'规划未来，做出重要的决定。',meaning_reversed:'犹豫不决，恐惧未知，需要勇敢迈出。'},
+  {id:39,name:'权杖三',type:'minor',suit:'权杖',number:3,element:'火',keywords:'远行、探索、远见、合作',meaning_upright:'展望未来，探索新的可能性。',meaning_reversed:'计划延迟，合作受阻，需要调整方向。'},
+  {id:40,name:'权杖四',type:'minor',suit:'权杖',number:4,element:'火',keywords:'庆祝、和谐、家园、稳定',meaning_upright:'庆祝与喜悦，家庭和谐，稳固的基础。',meaning_reversed:'不稳定的环境，庆祝被取消，需要维护和谐。'},
+  {id:41,name:'权杖五',type:'minor',suit:'权杖',number:5,element:'火',keywords:'竞争、冲突、挑战、分歧',meaning_upright:'竞争与挑战，需要努力争取。',meaning_reversed:'避免冲突，妥协合作，找到共同点。'},
+  {id:42,name:'权杖六',type:'minor',suit:'权杖',number:6,element:'火',keywords:'胜利、认可、成功、骄傲',meaning_upright:'获得胜利与认可，享受成功的喜悦。',meaning_reversed:'失败与挫折，缺乏认可，需要继续努力。'},
+  {id:43,name:'权杖七',type:'minor',suit:'权杖',number:7,element:'火',keywords:'防御、坚持、挑战、勇气',meaning_upright:'坚守阵地，勇敢面对挑战。',meaning_reversed:'放弃与退缩，压力过大，需要重新评估。'},
+  {id:44,name:'权杖八',type:'minor',suit:'权杖',number:8,element:'火',keywords:'速度、行动、进展、消息',meaning_upright:'快速进展，好消息即将到来。',meaning_reversed:'延误与阻碍，计划受阻，需要耐心等待。'},
+  {id:45,name:'权杖九',type:'minor',suit:'权杖',number:9,element:'火',keywords:'坚持、韧性、防御、警觉',meaning_upright:'最后的坚持，保持警惕，即将成功。',meaning_reversed:'精疲力竭，放弃抵抗，需要休息。'},
+  {id:46,name:'权杖十',type:'minor',suit:'权杖',number:10,element:'火',keywords:'负担、压力、责任、过度',meaning_upright:'背负过多的责任，需要学会放手。',meaning_reversed:'卸下重担，分配任务，减轻压力。'},
+  {id:47,name:'权杖国王',type:'minor',suit:'权杖',number:11,element:'火',keywords:'领导力、远见、企业家、冒险',meaning_upright:'充满魅力的领导者，勇敢开拓新领域。',meaning_reversed:'专横跋扈，冒险过度，需要倾听他人意见。'},
+  {id:48,name:'权杖骑士',type:'minor',suit:'权杖',number:12,element:'火',keywords:'热情、冒险、旅行、冲动',meaning_upright:'充满热情与冒险精神，勇敢追求目标。',meaning_reversed:'冲动鲁莽，计划不周，需要冷静思考。'},
+  {id:49,name:'权杖侍者',type:'minor',suit:'权杖',number:13,element:'火',keywords:'探索、热情、消息、学习',meaning_upright:'新的消息与机会，充满探索的热情。',meaning_reversed:'缺乏方向，计划延迟，需要重新定位。'},
+  {id:50,name:'权杖女王',type:'minor',suit:'权杖',number:14,element:'火',keywords:'自信、热情、果断、魅力',meaning_upright:'自信果断的女性，充满魅力与活力。',meaning_reversed:'缺乏自信，情绪化，需要找回内在力量。'},
+  {id:51,name:'权杖王牌',type:'minor',suit:'权杖',number:1,element:'火',keywords:'开始、创造、灵感、新起点',meaning_upright:'新的开始与创造，充满灵感与动力。',meaning_reversed:'缺乏动力，计划搁浅，需要重新点燃激情。'},
+  {id:52,name:'圣杯二',type:'minor',suit:'圣杯',number:2,element:'水',keywords:'爱情、结合、平等、友谊',meaning_upright:'平等的爱情与友谊，美好的结合。',meaning_reversed:'关系失衡，分手，需要重新评估。'},
+  {id:53,name:'圣杯三',type:'minor',suit:'圣杯',number:3,element:'水',keywords:'庆祝、友谊、欢乐、聚会',meaning_upright:'庆祝与欢乐，朋友相聚，分享喜悦。',meaning_reversed:'过度享乐，友谊破裂，需要节制。'},
+  {id:54,name:'圣杯四',type:'minor',suit:'圣杯',number:4,element:'水',keywords:'沉思、不满、冷漠、机会',meaning_upright:'对现状不满，需要审视内心真正的需求。',meaning_reversed:'新的机会，走出舒适区，接受改变。'},
+  {id:55,name:'圣杯五',type:'minor',suit:'圣杯',number:5,element:'水',keywords:'失落、悲伤、遗憾、失望',meaning_upright:'沉浸在失落与悲伤中，需要向前看。',meaning_reversed:'接受现实，从悲伤中走出，看到希望。'},
+  {id:56,name:'圣杯六',type:'minor',suit:'圣杯',number:6,element:'水',keywords:'回忆、怀旧、礼物、童年',meaning_upright:'美好的回忆与馈赠，重温过去的温暖。',meaning_reversed:'困在过去，无法前进，需要放下执念。'},
+  {id:57,name:'圣杯七',type:'minor',suit:'圣杯',number:7,element:'水',keywords:'幻想、选择、幻觉、梦想',meaning_upright:'面对多种选择，需要分辨幻想与现实。',meaning_reversed:'明确目标，聚焦现实，做出选择。'},
+  {id:58,name:'圣杯八',type:'minor',suit:'圣杯',number:8,element:'水',keywords:'放下、离开、寻找、探索',meaning_upright:'放下过去，踏上新的精神探索之旅。',meaning_reversed:'害怕改变，停滞不前，需要勇气。'},
+  {id:59,name:'圣杯九',type:'minor',suit:'圣杯',number:9,element:'水',keywords:'满足、愿望、幸福、享受',meaning_upright:'愿望成真，满足与幸福，享受成果。',meaning_reversed:'表面光鲜，内心空虚，需要真正的满足。'},
+  {id:60,name:'圣杯十',type:'minor',suit:'圣杯',number:10,element:'水',keywords:'幸福、家庭、和谐、圆满',meaning_upright:'家庭幸福，情感圆满，和谐美满。',meaning_reversed:'家庭矛盾，关系破裂，需要修复。'},
+  {id:61,name:'圣杯国王',type:'minor',suit:'圣杯',number:11,element:'水',keywords:'情感、成熟、慈悲、智慧',meaning_upright:'情感成熟的领导者，充满慈悲与智慧。',meaning_reversed:'情绪失控，过度敏感，需要情感管理。'},
+  {id:62,name:'圣杯骑士',type:'minor',suit:'圣杯',number:12,element:'水',keywords:'浪漫、追求、邀请、魅力',meaning_upright:'浪漫的追求者，充满魅力与理想。',meaning_reversed:'不切实际，情感欺骗，需要脚踏实地。'},
+  {id:63,name:'圣杯侍者',type:'minor',suit:'圣杯',number:13,element:'水',keywords:'直觉、消息、创意、敏感',meaning_upright:'新的消息与灵感，听从直觉的指引。',meaning_reversed:'创意受阻，情感幼稚，需要成熟面对。'},
+  {id:64,name:'圣杯女王',type:'minor',suit:'圣杯',number:14,element:'水',keywords:'直觉、关怀、情感、温柔',meaning_upright:'温柔关怀的女性，直觉敏锐，充满爱心。',meaning_reversed:'情感压抑，过度依赖，需要独立。'},
+  {id:65,name:'圣杯王牌',type:'minor',suit:'圣杯',number:1,element:'水',keywords:'爱情、新感情、直觉、灵感',meaning_upright:'新的爱情与感情，充满爱与灵感。',meaning_reversed:'情感空虚，爱意受阻，需要打开心扉。'},
+  {id:66,name:'星币二',type:'minor',suit:'星币',number:2,element:'土',keywords:'平衡、适应、变化、理财',meaning_upright:'在多重事务中保持平衡，灵活适应变化。',meaning_reversed:'失去平衡，财务混乱，需要调整。'},
+  {id:67,name:'星币三',type:'minor',suit:'星币',number:3,element:'土',keywords:'团队、合作、技能、学徒',meaning_upright:'团队合作，学习技能，共同完成目标。',meaning_reversed:'缺乏合作，技能不足，需要更多学习。'},
+  {id:68,name:'星币四',type:'minor',suit:'星币',number:4,element:'土',keywords:'守财、稳定、控制、吝啬',meaning_upright:'财务稳定，但过于保守，需要适度放松。',meaning_reversed:'财务损失，过度慷慨，需要平衡。'},
+  {id:69,name:'星币五',type:'minor',suit:'星币',number:5,element:'土',keywords:'贫困、困难、孤立、担忧',meaning_upright:'物质或精神上的匮乏，需要寻求帮助。',meaning_reversed:'走出困境，找到希望，改善状况。'},
+  {id:70,name:'星币六',type:'minor',suit:'星币',number:6,element:'土',keywords:'慷慨、分享、慈善、帮助',meaning_upright:'慷慨给予与接受，帮助他人，分享财富。',meaning_reversed:'自私自利，债务问题，需要平衡给予与索取。'},
+  {id:71,name:'星币七',type:'minor',suit:'星币',number:7,element:'土',keywords:'评估、投资、等待、收获',meaning_upright:'评估投资成果，等待收获的季节。',meaning_reversed:'投资失败，缺乏耐心，需要重新评估。'},
+  {id:72,name:'星币八',type:'minor',suit:'星币',number:8,element:'土',keywords:'勤奋、技能、工作、专注',meaning_upright:'勤奋工作，专注提升技能，精益求精。',meaning_reversed:'工作倦怠，缺乏动力，需要休息。'},
+  {id:73,name:'星币九',type:'minor',suit:'星币',number:9,element:'土',keywords:'自律、成就、独立、奢华',meaning_upright:'通过自律获得成就，享受独立与奢华。',meaning_reversed:'过度工作，忽视生活，需要平衡。'},
+  {id:74,name:'星币十',type:'minor',suit:'星币',number:10,element:'土',keywords:'财富、传承、家族、长久',meaning_upright:'长久的财富与传承，家族繁荣。',meaning_reversed:'财务危机，家族矛盾，需要重新整合。'},
+  {id:75,name:'星币国王',type:'minor',suit:'星币',number:11,element:'土',keywords:'成功、商业、财富、稳定',meaning_upright:'成功的商业领袖，财富与稳定的象征。',meaning_reversed:'财务失败，固执守旧，需要创新。'},
+  {id:76,name:'星币骑士',type:'minor',suit:'星币',number:12,element:'土',keywords:'务实、勤奋、可靠、责任',meaning_upright:'务实可靠的行动者，勤奋工作，负责任。',meaning_reversed:'缺乏进展，懒惰拖延，需要增加动力。'},
+  {id:77,name:'星币侍者',type:'minor',suit:'星币',number:13,element:'土',keywords:'学习、消息、实践、专注',meaning_upright:'新的学习机会，专注实践，脚踏实地。',meaning_reversed:'缺乏计划，学习受阻，需要更多专注。'},
+  {id:78,name:'星币女王',type:'minor',suit:'星币',number:14,element:'土',keywords:'务实、丰饶、关怀、自然',meaning_upright:'务实丰饶的女性，关怀他人，享受自然。',meaning_reversed:'忽视自我，过度工作，需要关爱自己。'},
+  {id:79,name:'星币王牌',type:'minor',suit:'星币',number:1,element:'土',keywords:'财富、新开始、机会、物质',meaning_upright:'新的财务机会，物质上的新开始。',meaning_reversed:'错失良机，财务损失，需要重新把握。'}
+];
+var PHOTO_MAP = {
+  1:'01_0.愚人.jpg',2:'02_1.魔术师.jpg',3:'03_2.女祭司.jpg',4:'04_3.女皇.jpg',
+  5:'05_4.皇帝.jpg',6:'06_5.教皇.jpg',7:'07_6.恋人.jpg',8:'08_7.战车.jpg',
+  9:'09_8.力量.jpg',10:'10_9.隐士.jpg',11:'11_10.命运之轮.jpg',12:'12_11.正义.jpg',
+  13:'13_12.倒吊人.jpg',14:'14_13.死神.jpg',15:'15_14.节制.jpg',16:'16_15.恶魔.jpg',
+  17:'17_16.高塔.jpg',18:'18_17.星星.jpg',19:'19_18.月亮.jpg',20:'20_19.太阳.jpg',
+  21:'21_20.审判.jpg',22:'22_21.世界.jpg',23:'23_宝剑2.jpg',24:'24_宝剑3.jpg',
+  25:'25_宝剑4.jpg',26:'26_宝剑5.jpg',27:'27_宝剑6.jpg',28:'28_宝剑7.jpg',
+  29:'29_宝剑8.jpg',30:'30_宝剑9.jpg',31:'31_宝剑10.jpg',32:'32_宝剑国王.jpg',
+  33:'33_宝剑骑士.jpg',34:'34_宝剑侍者.jpg',35:'35_宝剑女王.jpg',36:'36_宝剑王牌.jpg',
+  37:'37_普及版背面.jpg',38:'38_权杖2.jpg',39:'39_权杖3.jpg',40:'40_权杖4.jpg',
+  41:'41_权杖5.jpg',42:'42_权杖6.jpg',43:'43_权杖7.jpg',44:'44_权杖8.jpg',
+  45:'45_权杖9.jpg',46:'46_权杖10.jpg',47:'47_权杖国王.jpg',48:'48_权杖骑士.jpg',
+  49:'49_权杖侍者.jpg',50:'50_权杖女王.jpg',51:'51_权杖王牌.jpg',52:'52_圣杯2.jpg',
+  53:'53_圣杯3.jpg',54:'54_圣杯4.jpg',55:'55_圣杯5.jpg',56:'56_圣杯6.jpg',
+  57:'57_圣杯7.jpg',58:'58_圣杯8.jpg',59:'59_圣杯9.jpg',60:'60_圣杯10.jpg',
+  61:'61_圣杯国王.jpg',62:'62_圣杯骑士.jpg',63:'63_圣杯侍者.jpg',64:'64_圣杯女王.jpg',
+  65:'65_圣杯王牌.jpg',66:'66_星币2.jpg',67:'67_星币3.jpg',68:'68_星币4.jpg',
+  69:'69_星币5.jpg',70:'70_星币6.jpg',71:'71_星币7.jpg',72:'72_星币8.jpg',
+  73:'73_星币9.jpg',74:'74_星币10.jpg',75:'75_星币国王.jpg',76:'76_星币骑士.jpg',
+  77:'77_星币侍者.jpg',78:'78_星币女王.jpg',79:'79_星币王牌.jpg'
+};
+// ============ 12星座特性 ============
+var ZODIAC_TRAITS = {
+  '白羊座':{element:'火',traits:'热情冲动、勇敢直率、行动力强'},
+  '金牛座':{element:'土',traits:'稳重踏实、固执坚韧、重视物质'},
+  '双子座':{element:'风',traits:'聪明机智、善变好奇、沟通力强'},
+  '巨蟹座':{element:'水',traits:'温柔敏感、家庭至上、情感丰富'},
+  '狮子座':{element:'火',traits:'自信骄傲、热情大方、领导力强'},
+  '处女座':{element:'土',traits:'追求完美、细致谨慎、理性分析'},
+  '天秤座':{element:'风',traits:'优雅公正、社交达人、犹豫不决'},
+  '天蝎座':{element:'水',traits:'深沉神秘、意志坚定、直觉敏锐'},
+  '射手座':{element:'火',traits:'乐观自由、热爱冒险、直言不讳'},
+  '摩羯座':{element:'土',traits:'务实稳重、坚韧不拔、事业心强'},
+  '水瓶座':{element:'风',traits:'独立创新、理性冷静、思想前卫'},
+  '双鱼座':{element:'水',traits:'浪漫梦幻、富有同情心、直觉力强'}
+};
+// ============ 心情提示词 ============
+var MOOD_PROMPTS = {
+  '平静':{prefix:'你此刻内心平静，这是一个很好的占卜状态。',tone:'平和'},
+  '快乐':{prefix:'你带着愉悦的心情来占卜，这份喜悦会吸引美好的能量！',tone:'欢快'},
+  '焦虑':{prefix:'我能感受到你内心的不安，但请放心，塔罗牌会给你指引。',tone:'安抚'},
+  '悲伤':{prefix:'看到你心情低落，我很难过。让塔罗牌给你一些温暖和力量吧。',tone:'温柔'},
+  '愤怒':{prefix:'愤怒是正常的情绪，但别让它蒙蔽了你的判断。深呼吸，听听塔罗想对你说什么。',tone:'冷静'},
+  '期待':{prefix:'你满怀期待的心情，宇宙已经感受到了！',tone:'积极'},
+  '迷茫':{prefix:'迷茫的时候，正是塔罗牌最能帮到你的时刻。',tone:'指引'},
+  '感恩':{prefix:'带着感恩之心占卜，你会收到宇宙最美的回馈。',tone:'温暖'}
+};
+// ============ 解读风格 ============
+var STYLE_PROMPTS = {
+  'friend':'用亲切随和、像朋友聊天一样的语气回复，可以用一些口语化的表达，比如"我跟你说啊"、"要我说啊"、"别担心"之类的。',
+  'mentor':'用睿智深沉、充满哲理与智慧的语气回复，可以用一些富有诗意的表达，引用一些人生哲理，像一位智者一样给出指引。',
+  'sharp':'用一针见血、不绕弯子的语气回复，直接点出问题核心，用词可以犀利一些，但最终目的是帮助对方看清真相。'
+};
+// ============ 星星背景 ============
+(function(){var c=document.getElementById('stars');for(var i=0;i<100;i++){var s=document.createElement('div');s.className='star';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.setProperty('--duration',(2+Math.random()*4)+'s');s.style.setProperty('--max-opacity',(0.3+Math.random()*0.7));s.style.animationDelay=Math.random()*5+'s';var sz=1+Math.random()*2;s.style.width=sz+'px';s.style.height=sz+'px';c.appendChild(s);}})();
+// ============ 粒子特效 ============
+function startParticles(){var canvas=document.getElementById('particleCanvas');canvas.width=window.innerWidth;canvas.height=window.innerHeight;var ctx=canvas.getContext('2d');var particles=[];for(var i=0;i<150;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*3,vy:(Math.random()-0.5)*3,size:Math.random()*4+1,color:'hsla('+(270+Math.random()*60)+',80%,60%,'+(0.3+Math.random()*0.5)+')'});}
+function animate(){ctx.clearRect(0,0,canvas.width,canvas.height);for(var i=0;i<particles.length;i++){var p=particles[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>canvas.width)p.vx*=-1;if(p.y<0||p.y>canvas.height)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill();for(var j=i+1;j<particles.length;j++){var p2=particles[j];var dx=p.x-p2.x;var dy=p.y-p2.y;var dist=Math.sqrt(dx*dx+dy*dy);if(dist<150){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p2.x,p2.y);ctx.strokeStyle='hsla(270,60%,60%,'+(0.1*(1-dist/150))+')';ctx.lineWidth=0.5;ctx.stroke();}}}
+particleAnimId=requestAnimationFrame(animate);}
+animate();}
+function stopParticles(){if(particleAnimId){cancelAnimationFrame(particleAnimId);particleAnimId=null;}
+var canvas=document.getElementById('particleCanvas');var ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);}
+// ============ 主题切换 ============
+function toggleTheme(){document.body.classList.toggle('light-theme');document.getElementById('themeToggle').textContent=document.body.classList.contains('light-theme')?'🌙':'☀️';}
+// ============ 风格选择 ============
+function setStyle(style){currentStyle=style;document.querySelectorAll('.style-btn').forEach(function(b){b.classList.toggle('active',b.dataset.style===style);});}
+// ============ 模式切换 ============
+function onModeChange(){var mode=document.getElementById('modeSelect').value;var qg=document.getElementById('questionGroup');var sg=document.getElementById('spreadGroup');if(mode==='daily'){qg.style.display='none';sg.style.display='none';}else if(mode==='quick'){qg.style.display='block';sg.style.display='none';}else{qg.style.display='block';sg.style.display='block';}}
+// ============ AI 调用 ============
+async function callAI(systemPrompt,userPrompt){var resp=await fetch(AI_CONFIG.baseURL+'/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+AI_CONFIG.apiKey},body:JSON.stringify({model:AI_CONFIG.model,messages:[{role:'system',content:systemPrompt},{role:'user',content:userPrompt}],max_tokens:2000,temperature:0.8})});var data=await resp.json();if(data.choices&&data.choices.length>0){return data.choices[0].message.content;}
+throw new Error('AI响应异常:'+JSON.stringify(data));}
+// ============ 开始占卜流程 ============
+function beginRitual(){var mode=document.getElementById('modeSelect').value;var question=document.getElementById('questionInput').value;if(mode!=='daily'&&!question.trim()){document.getElementById('questionInput').classList.add('field-error');document.getElementById('questionError').classList.add('show');document.getElementById('questionInput').focus();return;}
+document.getElementById('questionInput').classList.remove('field-error');document.getElementById('questionError').classList.remove('show');var overlay=document.getElementById('ritualOverlay');overlay.classList.add('show');var countdown=document.getElementById('countdown');var count=3;countdown.textContent=count;var timer=setInterval(function(){count--;if(count>0){countdown.textContent=count;}else{clearInterval(timer);countdown.textContent='✨';overlay.classList.remove('show');startShuffle();}},1000);}
+function startShuffle(){document.getElementById('shuffleSection').classList.add('show');document.getElementById('formSection').style.display='none';startParticles();setTimeout(function(){document.getElementById('shuffleSection').classList.remove('show');stopParticles();showPickCards();},3000);}
+// ============ 选牌界面 ============
+function showPickCards(){pickedCards=[];var grid=document.getElementById('pickGrid');grid.innerHTML='';allCardsData=TAROT_CARDS.slice().sort(function(){return Math.random()-0.5;});allCardsData.forEach(function(card){var div=document.createElement('div');div.className='pick-card';div.dataset.cardId=card.id;var pf=PHOTO_MAP[card.id]||'';var src='photos/'+encodeURIComponent(pf);div.innerHTML='<div class="card-back">🃏</div><img src="'+src+'" alt="'+card.name+'" onerror="this.style.display=\'none\'"><div class="pick-check">✓</div>';div.onclick=function(){togglePickCard(this,card);};grid.appendChild(div);});document.getElementById('pickCardsSection').classList.add('show');updatePickUI();}
+function togglePickCard(el,card){var idx=pickedCards.indexOf(card);if(idx>=0){pickedCards.splice(idx,1);el.classList.remove('selected','flipped');}else if(pickedCards.length<3){pickedCards.push(card);el.classList.add('selected','flipped');}
+updatePickUI();}
+function updatePickUI(){var count=pickedCards.length;document.getElementById('pickCount').textContent=count;var btn=document.getElementById('confirmPickBtn');if(count===3){btn.disabled=false;btn.textContent='✅ 确认选牌';document.getElementById('pickCounter').textContent='✅ 已选3张，点击确认开始解读';}else{btn.disabled=true;btn.textContent='✅ 确认选牌（'+count+'/3）';document.getElementById('pickCounter').textContent='请选择3张塔罗牌（已选'+count+'/3）';}}
+// ============ 核心：确认选牌 + 调用AI ============
+async function confirmPick(){
+  if(pickedCards.length!==3)return;
+  document.getElementById('pickCardsSection').classList.remove('show');
+  document.getElementById('loadingSection').classList.add('show');
+  try{
+    var question=document.getElementById('questionInput').value;
+    var mode=document.getElementById('modeSelect').value;
+    var spread=document.getElementById('spreadSelect').value;
+    var zodiac=document.getElementById('zodiacSelect').value;
+    var mood=document.getElementById('moodSelect').value;
+    var ts=Date.now();
+    var spreadPositions={'body-mind-spirit':['身体/物质','心理/情感','灵性/精神'],'situation-obstacle-outcome':['当前状况','面临的阻碍','可能的出路'],'you-them-us':['你的状态','对方的状态','你们的关系'],'yesterday-today-tomorrow':['过去的影响','当下的力量','未来的指引']};
+    var positions=spreadPositions[spread]||['位置1','位置2','位置3'];
+    var cards=pickedCards.map(function(c,i){
+      var isUpright=(ts+i*7)%2===0;
+      return{id:c.id,name:c.name,type:c.type,suit:c.suit,element:c.element,keywords:c.keywords,meaning_upright:c.meaning_upright,meaning_reversed:c.meaning_reversed,isUpright:isUpright,position:positions[i]||'位置'+(i+1),photoFile:PHOTO_MAP[c.id]||''};
+    });
+    var cardsInfo=cards.map(function(c,i){
+      var ori=c.isUpright?'正位':'逆位';
+      return'【'+c.position+'】'+c.name+'（'+ori+'）\n- 关键词：'+c.keywords+'\n- 元素：'+c.element+'\n- 正位含义：'+c.meaning_upright+'\n- 逆位含义：'+c.meaning_reversed;
+    }).join('\n\n');
+    var zodiacInfo='';
+    if(zodiac&&ZODIAC_TRAITS[zodiac]){var z=ZODIAC_TRAITS[zodiac];zodiacInfo='\n求问者星座：'+zodiac+'（元素：'+z.element+'，性格特点：'+z.traits+'）';}
+    var moodInfo='';
+    if(mood&&MOOD_PROMPTS[mood]){moodInfo='\n求问者当前心情：'+mood+'（回复提示：'+MOOD_PROMPTS[mood].prefix+'，语气：'+MOOD_PROMPTS[mood].tone+'）';}
+    var styleInfo=STYLE_PROMPTS[currentStyle]||STYLE_PROMPTS['friend'];
+    var today=new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+    var systemPrompt='';
+    var userPrompt='';
+    if(mode==='daily'){
+      systemPrompt='你是一位通晓宇宙奥秘的灵犀智者，精通韦特塔罗78张牌的神秘力量。今天是'+today+'。\n'+styleInfo+'\n'+moodInfo+'\n'+zodiacInfo+'\n请根据抽到的塔罗牌，为求问者生成一份今日运势解读。格式要求：\n🔮 今日运势\n【今日整体运势】简要描述今天的能量场和灵性趋势\n【今日幸运色】给出一个具体的颜色，并说明其灵性含义\n【今日宜做】列出2-3件今天适合做的事情，用玄学角度解释\n【今日忌做】列出2-3件今天应该避免的事情\n【灵犀寄语】一句充满灵性智慧的建议\n不要使用任何Markdown格式（不要用**加粗、列表符号、标题标记等），纯文字表达\n适当使用emoji增加神秘感：🌙 ⭐ 🌌 🔮 ✨ 🌟 🕯️ 🌈 💫 🌊 🔥 🌿 💎';
+      userPrompt='求问者信息：'+zodiacInfo+moodInfo+'\n抽到的塔罗牌：\n'+cardsInfo+'\n请为这位求问者生成今日运势解读。';
+    }else if(mode==='quick'){
+      systemPrompt='你是一位通晓宇宙奥秘的灵犀智者，精通韦特塔罗78张牌的神秘力量。请用'+styleInfo+'\n'+moodInfo+'\n'+zodiacInfo+'\n用简洁的一两句话直接点破天机，不要长篇大论。用词要有玄学感，适当使用emoji：🔮 ✨ 🌙 ⭐ 🌌\n不要使用任何Markdown格式（不要用**加粗、列表符号、标题标记等），纯文字表达';
+      userPrompt='求问者的问题：'+question+'\n求问者信息：'+(zodiac?'星座：'+zodiac:'')+(mood?'，心情：'+mood:'')+'\n抽到的塔罗牌：\n'+cardsInfo+'\n请用一两句话直接回答求问者的问题。';
+    }else{
+      systemPrompt='你是一位通晓宇宙奥秘的灵犀智者，精通韦特塔罗78张牌的神秘力量。请用'+styleInfo+'\n'+moodInfo+'\n'+zodiacInfo+'\n请根据求问者的问题和抽到的塔罗牌，以通灵占卜师的身份给出详细解读。要求：\n1. 🌙 每张牌都要结合求问者的具体问题来解读，揭示牌面与问题的能量关联\n2. ⭐ 分析牌面元素（火水土风）在求问者问题中的具体体现\n3. 🌌 给出来自星辰的指引和建议\n4. ✨ 结合求问者的星座特性给出个性化灵性指引\n5. 🕯️ 根据求问者的心情调整回复语气\n6. 不要使用任何Markdown格式（不要用**加粗、列表符号、标题标记等），纯文字表达\n7. 适当使用emoji增加神秘感：🌙 ⭐ 🌌 🔮 ✨ 🌟 🕯️ 🌈 💫 🌊 🔥 🌿 💎\n8. 用词要有玄学感：星辰之力、宇宙能量、灵性指引、前世今生、能量场、灵魂契约等';
+      userPrompt='求问者的问题：'+question+'\n求问者信息：'+(zodiac?'星座：'+zodiac:'')+(mood?'，心情：'+mood:'')+'\n抽到的塔罗牌：\n'+cardsInfo+'\n请针对求问者的问题，结合每张牌的含义和位置，给出详细的占卜解读。';
+    }
+    var reading=await callAI(systemPrompt,userPrompt);
+    currentResult={success:true,cards:cards,reading:reading,style:currentStyle,spread:spread,mode:mode};
+    displayResult(currentResult);
+  }catch(err){
+    showError('占卜解读受阻：'+err.message);
+  }
+  document.getElementById('loadingSection').classList.remove('show');
+}
+// ============ 显示结果 ============
+function displayResult(data){var cards=data.cards||[];var container=document.getElementById('cardsDisplay');container.innerHTML='';cards.forEach(function(card){var div=document.createElement('div');div.className='tarot-card'+(card.isUpright?'':' reversed');var ori=card.isUpright?'正位':'逆位';var oriCls=card.isUpright?'upright':'reversed';var pf=card.photoFile||'';var src=pf?'photos/'+encodeURIComponent(pf):'';div.innerHTML='<div class="card-art">'+(src?'<img src="'+src+'" alt="'+card.name+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">':'')+'<span class="card-symbol" style="display:'+(src?'none':'block')+';font-size:3em;">🃏</span></div><div class="card-info"><div class="card-position">'+(card.position||'位置')+'</div><div class="card-name">'+card.name+'</div><div class="card-orientation '+oriCls+'">'+ori+'</div></div>';container.appendChild(div);});document.getElementById('readingContent').textContent=data.reading||'';var meta=document.getElementById('resultMeta');var sn={friend:'🤝 朋友闲聊',mentor:'🧙 人生导师',sharp:'⚡ 犀利直给'};var spn={'body-mind-spirit':'身·心·灵','situation-obstacle-outcome':'现状·阻碍·出路','you-them-us':'你·TA·我们','yesterday-today-tomorrow':'昨日·今日·明日'};var mn={detailed:'📜 详细占卜',quick:'⚡ 快捷占卜',daily:'🌅 今日运势'};meta.innerHTML='解读风格：'+(sn[data.style]||'朋友闲聊')+' | '+(mn[data.mode]||'详细占卜')+(data.spread&&spn[data.spread]?' | 牌阵：'+spn[data.spread]:'');document.getElementById('resultSection').classList.add('show');document.getElementById('formSection').style.display='none';document.getElementById('welcomeSection').style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
+function showError(msg){document.getElementById('errorMessage').textContent=msg||'占卜过程中出现了一些问题';document.getElementById('errorSection').classList.add('show');document.getElementById('loadingSection').classList.remove('show');}
+function retryReading(){document.getElementById('errorSection').classList.remove('show');document.getElementById('formSection').style.display='block';document.getElementById('welcomeSection').style.display='block';}
+function redraw(){currentResult=null;document.getElementById('resultSection').classList.remove('show');document.getElementById('formSection').style.display='block';document.getElementById('welcomeSection').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
+function goBack(){currentResult=null;document.getElementById('resultSection').classList.remove('show');document.getElementById('errorSection').classList.remove('show');document.getElementById('formSection').style.display='block';document.getElementById('welcomeSection').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
+async function downloadReport(){if(!currentResult)return;var cards=currentResult.cards||[];var sn={friend:'朋友闲聊',mentor:'人生导师',sharp:'犀利直给'};var spn={'body-mind-spirit':'身·心·灵','situation-obstacle-outcome':'现状·阻碍·出路','you-them-us':'你·TA·我们','yesterday-today-tomorrow':'昨日·今日·明日'};var styleName=sn[currentResult.style]||'默认';var spreadName=spn[currentResult.spread]||'三张牌阵';var question=document.getElementById('questionInput').value;var cardsHtml='';cards.forEach(function(c){var ori=c.isUpright?'正位':'逆位';cardsHtml+='<tr><td>'+(c.position||'')+'</td><td>'+c.name+'</td><td>'+ori+'</td><td>'+c.keywords+'</td></tr>';});var html='<!DOCTYPE html><html><head><meta charset="utf-8"><title>🔮 灵犀智者 · 塔罗占卜报告</title>';html+='<style>body{font-family:Georgia,serif;max-width:800px;margin:40px auto;padding:20px;background:#0d001a;color:#e2d5f0;}';html+='h1{color:#c084fc;text-align:center;border-bottom:2px solid #7c3aed;padding-bottom:15px;}';html+='h2{color:#a78bfa;margin-top:30px;}';html+='table{width:100%;border-collapse:collapse;margin:20px 0;}';html+='th,td{border:1px solid #4a1a6e;padding:10px;text-align:left;}';html+='th{background:#2d1b4e;color:#c084fc;}';html+='.reading{background:#1a0a2e;border-left:4px solid #7c3aed;padding:20px;margin:20px 0;line-height:1.8;white-space:pre-wrap;}';html+='.footer{text-align:center;margin-top:40px;color:#6b4a8a;font-size:0.9em;}</style></head><body>';html+='<h1>🔮 灵犀智者 · 塔罗占卜报告</h1>';html+='<p style="text-align:center;color:#a78bfa;">解读风格：'+styleName+' | 牌阵：'+spreadName+'</p>';if(question)html+='<p style="text-align:center;color:#e2d5f0;">求问问题：'+question+'</p>';html+='<h2>📜 牌面信息</h2><table><thead><tr><th>位置</th><th>牌名</th><th>方位</th><th>关键词</th></tr></thead><tbody>'+cardsHtml+'</tbody></table>';html+='<h2>🔮 占卜解读</h2><div class="reading">'+(currentResult.reading||'')+'</div>';html+='<div class="footer"><p>🕯️ 占卜时间：'+new Date().toLocaleString('zh-CN')+'</p><p>✨ 灵犀智者 · 塔罗占卜 ✨</p><p>宇宙的智慧与你同在 🌙</p></div></body></html>';var blob=new Blob([html],{type:'text/html;charset=utf-8'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='tarot-reading-report-'+Date.now()+'.html';a.click();URL.revokeObjectURL(url);}
+</script>
+</body>
+</html>

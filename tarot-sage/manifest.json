@@ -1,0 +1,19 @@
+{
+  "dxt_version": "0.1",
+  "name": "@aipy-pro/tarot-sage",
+  "display_name": "🔮 灵犀智者 · 塔罗占卜",
+  "version": "1.0.0",
+  "description": "赛博空间的神秘塔罗解读者，精通韦特塔罗78张牌意",
+  "author": { "name": "灵犀智者" },
+  "icon": "icon.svg",
+  "server": {
+    "type": "node",
+    "entry_point": "server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server.js"],
+      "env": {}
+    }
+  },
+  "keywords": ["embed-webview"]
+}
