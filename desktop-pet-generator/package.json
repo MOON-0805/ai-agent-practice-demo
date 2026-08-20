@@ -1,0 +1,79 @@
+{
+  "name": "desktop-pet-generator",
+  "version": "3.0.0",
+  "description": "🐾 桌面宠物生成器 v3.0 - 上传图片、去除背景、生成专属桌面宠物，支持深色模式、多宠物、GIF动图",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win",
+    "dist:linux": "electron-builder --linux",
+    "dist:all": "electron-builder --mac --win --linux"
+  },
+  "build": {
+    "appId": "com.aipy.desktop-pet",
+    "productName": "桌面宠物生成器",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json",
+      "src/**/*",
+      "assets/**/*"
+    ],
+    "win": {
+      "icon": "assets/app-icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "桌面宠物生成器-${version}-win-x64.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "桌面宠物生成器",
+      "uninstallDisplayName": "桌面宠物生成器",
+      "installerIcon": "assets/app-icon.ico",
+      "uninstallerIcon": "assets/app-icon.ico"
+    },
+    "mac": {
+      "category": "public.app-category.entertainment",
+      "icon": "assets/app-icon.png",
+      "identity": null,
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "桌面宠物生成器-${version}-mac-${arch}.${ext}"
+    }
+  },
+  "keywords": [
+    "desktop-pet",
+    "electron",
+    "pet-generator",
+    "桌面宠物"
+  ],
+  "author": "AiPy",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^26.15.3"
+  }
+}

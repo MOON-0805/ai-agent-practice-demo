@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 桌面宠物</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: transparent;
+            user-select: none;
+            -webkit-app-region: no-drag;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+        .interact-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+            white-space: nowrap;
+        }
+        .interact-hint.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="petCanvas"></canvas>
+    <div class="interact-hint" id="hint">💡 点击宠物可以互动哦~</div>
+    <script src="js/pet-engine.js"></script>
+    <script>
+        // ===== 启动宠物引擎 =====
+        // 等待 DOM 和 electronAPI 就绪后再初始化
+        function initPet() {
+            console.log('🐾 初始化宠物引擎...');
+            try {
+                // 确保 canvas 存在
+                const canvas = document.getElementById('petCanvas');
+                if (!canvas) {
+                    console.error('❌ 找不到 canvas 元素');
+                    return;
+                }
+                
+                // 创建引擎实例
+                window.petEngine = new DesktopPetEngine('petCanvas');
+                console.log('✅ 宠物引擎创建成功');
+                
+                // 默认启动
+                setTimeout(() => {
+                    window.petEngine.start();
+                    console.log('✅ 宠物已启动');
+                }, 1000);
+            } catch (e) {
+                console.error('❌ 宠物引擎初始化失败:', e);
+            }
+        }
+        
+        // 等待 DOM 就绪
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPet);
+        } else {
+            initPet();
+        }
+    </script>
+</body>
+</html>

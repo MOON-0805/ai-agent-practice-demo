@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 桌面宠物 - 全屏配置面板</title>
+    <link rel="stylesheet" href="css/config-full.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div id="particles-canvas"></div>
+    
+    <div class="full-container glass">
+        <!-- 左侧配置区 -->
+        <div class="config-left">
+            <h1 class="title">
+                <i class="fas fa-paw"></i> 桌面宠物配置
+                <span class="subtitle">全屏面板 · 自定义你的专属桌面小伙伴</span>
+            </h1>
+            
+            <!-- 主题切换 -->
+            <div class="theme-toggle">
+                <button class="theme-btn" id="themeToggleBtn">
+                    <i class="fas fa-moon"></i> 深色模式
+                </button>
+            </div>
+            
+            <!-- 宠物管理 -->
+            <div class="pet-manager">
+                <h2 class="section-title"><i class="fas fa-users"></i> 宠物管理</h2>
+                <div class="pet-manager-bar">
+                    <div class="pet-selector">
+                        <i class="fas fa-paw"></i>
+                        <select id="petSelector" class="pet-select">
+                            <option value="0">宠物 1</option>
+                        </select>
+                    </div>
+                    <div class="pet-manager-actions">
+                        <button class="btn btn-add-pet" id="addPetBtn">
+                            <i class="fas fa-plus"></i> 添加
+                        </button>
+                        <button class="btn btn-change-pet" id="changePetBtn">
+                            <i class="fas fa-exchange-alt"></i> 更换
+                        </button>
+                        <button class="btn btn-remove-pet" id="removePetBtn" disabled>
+                            <i class="fas fa-trash"></i> 移除
+                        </button>
+                    </div>
+                </div>
+                <div class="pet-count-display">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="activePetCount">当前 1/5 个宠物</span>
+                </div>
+            </div>
+            
+            <!-- 图片上传 -->
+            <div class="upload-section">
+                <h2 class="section-title"><i class="fas fa-image"></i> 宠物图片</h2>
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <p class="upload-text">点击或拖拽上传宠物图片</p>
+                    <p class="upload-hint">支持 PNG、JPG、GIF 格式，将自动去除背景</p>
+                    <input type="file" id="fileInput" accept="image/png,image/jpeg,image/jpg,image/gif" hidden>
+                </div>
+                <div class="preview-area" id="previewArea" style="display:none;">
+                    <div class="preview-container">
+                        <img id="previewImage" alt="宠物预览">
+                    </div>
+                </div>
+                <div class="processing-status" id="processingStatus" style="display:none;">
+                    <div class="spinner"></div>
+                    <span>正在处理...</span>
+                </div>
+            </div>
+            
+            <!-- 控制按钮 -->
+            <div class="control-section">
+                <h2 class="section-title"><i class="fas fa-gamepad"></i> 控制</h2>
+                <div class="controls">
+                    <button class="btn btn-primary" id="startBtn">
+                        <i class="fas fa-play"></i> 启动全部
+                    </button>
+                    <button class="btn btn-warning" id="stopBtn">
+                        <i class="fas fa-pause"></i> 暂停全部
+                    </button>
+                    <button class="btn btn-secondary" id="resetBtn">
+                        <i class="fas fa-home"></i> 重置位置
+                    </button>
+                    <button class="btn btn-info" id="toggleVisibilityBtn">
+                        <i class="fas fa-eye"></i> 隐藏宠物
+                    </button>
+                    <button class="btn btn-success" id="exportBtn">
+                        <i class="fas fa-download"></i> 导出配置
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 状态信息 -->
+            <div class="status-section">
+                <div class="status-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>宠物状态：</span>
+                    <span id="petStatusDisplay" class="status-value">🐾 活跃中</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-eye"></i>
+                    <span>显示状态：</span>
+                    <span id="visibilityDisplay" class="status-value">👀 可见</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右侧设置区 -->
+        <div class="config-right">
+            <h2 class="section-title"><i class="fas fa-sliders-h"></i> 个性化设置</h2>
+            
+            <div class="setting-group">
+                <label class="setting-label" for="petName">
+                    <i class="fas fa-tag"></i> 宠物名称
+                </label>
+                <input type="text" id="petName" class="setting-input" placeholder="给宠物取个名字..." value="宠物 1">
+            </div>
+            
+            <div class="setting-group">
+                <label class="setting-label" for="petSize">
+                    <i class="fas fa-expand-arrows-alt"></i> 宠物大小
+                </label>
+                <div class="slider-container">
+                    <input type="range" id="petSize" class="setting-slider" min="40" max="200" value="80">
+                    <span class="slider-value" id="sizeValue">80px</span>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <label class="setting-label">
+                    <i class="fas fa-tachometer-alt"></i> 移动速度
+                </label>
+                <div class="option-group">
+                    <label class="option-btn" data-value="slow">
+                        <input type="radio" name="speed" value="slow">
+                        <span>🐢 慢速</span>
+                    </label>
+                    <label class="option-btn active" data-value="medium">
+                        <input type="radio" name="speed" value="medium" checked>
+                        <span>🐇 中速</span>
+                    </label>
+                    <label class="option-btn" data-value="fast">
+                        <input type="radio" name="speed" value="fast">
+                        <span>🚀 快速</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <label class="setting-label">
+                    <i class="fas fa-heart"></i> 宠物性格
+                </label>
+                <div class="option-group">
+                    <label class="option-btn active" data-value="lively">
+                        <input type="radio" name="personality" value="lively" checked>
+                        <span>⚡ 活泼</span>
+                    </label>
+                    <label class="option-btn" data-value="gentle">
+                        <input type="radio" name="personality" value="gentle">
+                        <span>🌿 温和</span>
+                    </label>
+                    <label class="option-btn" data-value="lazy">
+                        <input type="radio" name="personality" value="lazy">
+                        <span>😴 慵懒</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 性格说明 -->
+            <div class="personality-tips">
+                <h3><i class="fas fa-info-circle"></i> 性格说明</h3>
+                <p>⚡ <strong>活泼</strong>：动作快、爱跑爱跳、移动速度快</p>
+                <p>🌿 <strong>温和</strong>：动作适中、优雅漫步、偶尔跳跃</p>
+                <p>😴 <strong>慵懒</strong>：动作慢、经常发呆、移动缓慢</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="js/config-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🖼️ 智能抠图工具</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="main-panel glass">
+            <h1 class="title">
+                <i class="fas fa-cut"></i> 智能抠图工具
+                <span class="subtitle">上传图片，一键去除背景，生成透明PNG</span>
+            </h1>
+            
+            <!-- 上传区域 -->
+            <div class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <p class="upload-text">点击或拖拽上传图片</p>
+                    <p class="upload-hint">支持 PNG、JPG 格式</p>
+                    <input type="file" id="fileInput" accept="image/png,image/jpeg,image/jpg" hidden>
+                </div>
+                <div class="processing-status" id="processingStatus" style="display:none;">
+                    <div class="spinner"></div>
+                    <span>正在去除背景...</span>
+                </div>
+            </div>
+            
+            <!-- 结果区域 -->
+            <div class="result-section" id="resultSection" style="display:none;">
+                <div class="result-container">
+                    <div class="result-item">
+                        <h3>原图</h3>
+                        <img id="originalImage" alt="原图">
+                    </div>
+                    <div class="result-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="result-item">
+                        <h3>抠图结果</h3>
+                        <img id="cutoutImage" alt="抠图结果">
+                    </div>
+                </div>
+                <div class="result-actions">
+                    <button class="btn btn-primary" id="downloadBtn">
+                        <i class="fas fa-download"></i> 下载透明PNG
+                    </button>
+                    <button class="btn btn-secondary" id="resetBtn">
+                        <i class="fas fa-redo"></i> 重新上传
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="/app.js"></script>
+</body>
+</html>
