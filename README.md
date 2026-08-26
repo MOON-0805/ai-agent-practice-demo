@@ -27,6 +27,18 @@
 - `career‑planner`：职业规划智能体完整源码
 - `desktop‑pet‑generator`：Electron桌宠生成器源码
 
+## 📂docs目录说明
+docs文件夹存放个人实践复盘、可复用分析模板，全部为个人沉淀，不含公司内部业务资料。
+- agent‑dev‑summary.md：AI智能体开发复盘
+- llm‑evaluation‑report.md：大模型测评实践总结
+- desktop‑pet‑reflection.md：Electron桌宠项目复盘
+- project‑todo.md：项目后续迭代待办
+- wechat‑tutorial‑template.md：推文&用户教程产出框架
+- user‑issue‑to‑prd‑template.md：用户反馈转需求分析模板
+- user‑layer‑analysis‑template.md：C端用户分层落地判断模板
+- intern‑summary‑star.md：实习完整STAR复盘，面试素材
+
+
 ### 本地运行简要提示
 1. 将对应项目目录下 `.env.example`复制一份，重命名为 `.env`，填入自己的API Key。
 2. 执行 `npm install`安装依赖，再启动服务；桌宠项目执行`npm run build`完成本地打包。
