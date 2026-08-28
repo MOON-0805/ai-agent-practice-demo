@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI业务测试工程师 · 求职作品集</title>
+<style>
+  :root{
+    --primary:#1a73e8;
+    --primary-dark:#1558b0;
+    --bg:#f5f7fa;
+    --card:#ffffff;
+    --text:#2c3e50;
+    --text-light:#5a6b7c;
+    --border:#e3e8ef;
+    --radius:10px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .container{max-width:960px;margin:0 auto;padding:0 24px;}
+  /* ===== Hero ===== */
+  .hero{
+    background:linear-gradient(135deg,#1a73e8 0%,#0f4c9e 100%);
+    color:#fff;
+    padding:64px 0 56px;
+  }
+  .hero .container{display:flex;flex-direction:column;align-items:flex-start;}
+  .hero h1{font-size:2.6rem;font-weight:700;letter-spacing:1px;}
+  .hero .intent{
+    display:inline-block;
+    margin-top:12px;
+    background:rgba(255,255,255,0.18);
+    border:1px solid rgba(255,255,255,0.35);
+    padding:6px 16px;
+    border-radius:999px;
+    font-size:1.05rem;
+    font-weight:600;
+  }
+  .hero p.desc{margin-top:18px;max-width:720px;font-size:1.02rem;color:rgba(255,255,255,0.94);}
+  .hero .links{margin-top:22px;display:flex;flex-wrap:wrap;gap:14px;}
+  .hero .links a{
+    color:#fff;
+    text-decoration:none;
+    font-size:0.98rem;
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 16px;
+    border:1px solid rgba(255,255,255,0.5);
+    border-radius:8px;
+    transition:background .2s;
+  }
+  .hero .links a:hover{background:rgba(255,255,255,0.16);}
+  /* ===== Section ===== */
+  .section{padding:48px 0 8px;}
+  .section-title{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--primary-dark);
+    border-left:4px solid var(--primary);
+    padding-left:14px;
+    margin-bottom:24px;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:24px 26px;
+    margin-bottom:24px;
+  }
+  .card h3{font-size:1.15rem;margin-bottom:6px;}
+  .card .sub{color:var(--text-light);font-size:0.9rem;margin-bottom:14px;}
+  .card ul{list-style:none;}
+  .card li{
+    position:relative;
+    padding-left:20px;
+    margin-bottom:10px;
+    font-size:0.98rem;
+  }
+  .card li::before{
+    content:"";
+    position:absolute;left:2px;top:10px;
+    width:7px;height:7px;border-radius:50%;
+    background:var(--primary);
+  }
+  .doc-links{margin-top:6px;display:flex;flex-wrap:wrap;gap:10px 18px;}
+  .doc-links a{
+    color:var(--primary);
+    text-decoration:none;
+    font-size:0.95rem;
+  }
+  .doc-links a:hover{text-decoration:underline;}
+  /* ===== Projects ===== */
+  .tech-tags{margin:10px 0 12px;display:flex;flex-wrap:wrap;gap:8px;}
+  .tech-tags span{
+    background:#eaf1fd;
+    color:var(--primary-dark);
+    font-size:0.82rem;
+    padding:3px 10px;
+    border-radius:6px;
+    border:1px solid #d4e2fb;
+  }
+  /* ===== Demo ===== */
+  .demo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-bottom:10px;}
+  .demo-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .demo-img{
+    background:#eef1f6;
+    display:flex;align-items:center;justify-content:center;
+    min-height:180px;
+  }
+  .demo-img img{width:100%;height:auto;display:block;object-fit:cover;}
+  .demo-img .placeholder{color:#8a97a8;font-size:0.92rem;padding:24px;text-align:center;}
+  .demo-body{padding:16px 18px;}
+  .demo-body h4{font-size:1.02rem;margin-bottom:6px;}
+  .demo-body p{font-size:0.9rem;color:var(--text-light);}
+  .demo-note{
+    font-size:0.88rem;color:var(--text-light);
+    background:var(--card);border:1px dashed var(--border);
+    padding:12px 16px;border-radius:8px;margin:6px 0 24px;
+  }
+  /* ===== Skills ===== */
+  .skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .skill-box h4{
+    font-size:1.02rem;color:var(--primary-dark);
+    margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #eaf1fd;
+  }
+  .skill-box ul{list-style:none;}
+  .skill-box li{
+    position:relative;padding-left:18px;margin-bottom:8px;
+    font-size:0.95rem;
+  }
+  .skill-box li::before{
+    content:"•";position:absolute;left:2px;color:var(--primary);font-weight:700;
+  }
+  .skill-box .tools{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
+  .skill-box .tools strong{color:var(--text);}
+  /* ===== Footer ===== */
+  footer{
+    margin-top:48px;
+    background:#1f2a36;
+    color:#c7d1dc;
+    padding:26px 0;
+    text-align:center;
+    font-size:0.9rem;
+  }
+  footer a{color:#8ab4f8;text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+  footer .copy{margin-top:6px;color:#8a97a8;font-size:0.82rem;}
+  /* ===== Responsive ===== */
+  @media (max-width:768px){
+    .hero{padding:44px 0 40px;}
+    .hero h1{font-size:2rem;}
+    .demo-grid{grid-template-columns:1fr;}
+    .skill-grid{grid-template-columns:1fr;}
+    .container{padding:0 18px;}
+  }
+</style>
+</head>
+<body>
+<!-- ========== 1. Hero ========== -->
+<header class="hero">
+  <div class="container">
+    <h1>钟莹莹</h1>
+    <span class="intent">求职意向：AI业务测试工程师</span>
+    <p class="desc">
+      拥有AI智能体客户端实习测试经历，熟悉黑盒手工测试、版本上线保障、AI产品问题判别，
+      擅长区分用户操作问题、产品Bug、大模型固有能力局限；具备测试、用户视角的跨维度思考，
+      有完整复盘沉淀文档。
+    </p>
+    <div class="links">
+      <a href="https://github.com/MOON-0805" target="_blank" rel="noopener">🔗 GitHub</a>
+      <a href="mailto:3337996907@qq.com">✉️ 3337996907@qq.com</a>
+    </div>
+  </div>
+</header>
+<!-- ========== 2. 实习经历 ========== -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">实习经历 · 知道创宇 · AI测试实习生（2026.7-2026.8）</h2>
+    <div class="card">
+      <ul>
+        <li>负责AiPy Pro桌面客户端<strong>1.3.0‑2.0.1多版本黑盒测试</strong>，覆盖<strong>Windows、Mac M1、Mac Intel</strong>多操作系统；针对<strong>奖励机制、沙盒反羊毛风控</strong>等重点模块独立编写测试用例，执行新增功能验证、缺陷回归、AI边界探索测试。</li>
+        <li>通过在线文档管理<strong>P0/P1/P2分级缺陷</strong>，上线窗口期建立专项同步机制，跟进遗留缺陷闭环；执行<strong>冒烟测试、线上验证</strong>，保障<strong>2.0大版本</strong>顺利发布。</li>
+        <li>承接用户反馈问题，自主还原复现场景，建立<strong>AI产品三分判别逻辑</strong>，区分产品Bug、用户使用问题、大模型固有能力局限；非缺陷类问题沉淀为推文完成用户教育引导。</li>
+        <li>实习期间业余<strong>vibecoding完成4套场景化智能体Demo</strong>，代码脱敏开源。</li>
+        <li>实习沉淀输出<strong>SOP与多份复盘文档</strong>，放置在项目仓库docs文件夹。</li>
+      </ul>
+      <div class="doc-links">
+        <a href="./docs/ai-product-manual-test-sop.md">🔗 AI手工测试SOP</a>
+        <a href="./docs/intern-summary-star.md">🔗 实习STAR完整复盘</a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ========== 3. 个人项目 ========== -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">个人项目</h2>
+    <div class="card">
+      <h3>项目1：电信智能客服助手</h3>
+      <div class="sub">技术栈：Python、Dify、Ollama、Pytest</div>
+      <div class="tech-tags">
+        <span>Python</span><span>Dify</span><span>Ollama</span><span>Pytest</span>
+      </div>
+      <ul>
+        <li>基于<strong>等价类、边界值</strong>设计测试用例，完成AI对话功能测试与回归测试。</li>
+        <li>使用<strong>Pytest</strong>实现简单自动化回归脚本，实现批量case校验。</li>
+        <li>建立<strong>BadCase复盘闭环</strong>，完成问题定位、归档；输出评测报告。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>项目2：通用智能AI-Agent系统</h3>
+      <div class="sub">技术栈：Python、大模型API、Git</div>
+      <div class="tech-tags">
+        <span>Python</span><span>大模型API</span><span>Git</span>
+      </div>
+      <ul>
+        <li>搭建Agent智能体，重点做<strong>异常输入、工作流链路边界测试</strong>；构建<strong>异常兜底、安全校验</strong>逻辑。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<!-- ========== 4. 个人Demo演示 ========== -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">个人Demo演示</h2>
+    <div class="demo-grid">
+      <div class="demo-item">
+        <div class="demo-img">
+          <img src="./assets/career-planner/demo01.png" alt="职业规划智能体截图" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="placeholder" style="display:none;">职业规划智能体 · 截图暂不可用</div>
+        </div>
+        <div class="demo-body">
+          <h4>职业规划智能体</h4>
+          <p>基于大模型能力，提供个性化职业路径规划与建议。</p>
+        </div>
+      </div>
+      <div class="demo-item">
+        <div class="demo-img">
+          <img src="./assets/tarot-sage/demo01.png" alt="塔罗智能体截图" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="placeholder" style="display:none;">塔罗智能体 · 截图暂不可用</div>
+        </div>
+        <div class="demo-body">
+          <h4>塔罗智能体</h4>
+          <p>趣味塔罗占卜交互，展示多轮对话与结果生成能力。</p>
+        </div>
+      </div>
+      <div class="demo-item">
+        <div class="demo-img">
+          <img src="./assets/video-script-generator/demo01.png" alt="脚本生成智能体截图" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="placeholder" style="display:none;">脚本生成智能体 · 截图暂不可用</div>
+        </div>
+        <div class="demo-body">
+          <h4>脚本生成智能体</h4>
+          <p>一键生成短视频/口播脚本，支持多风格切换。</p>
+        </div>
+      </div>
+      <div class="demo-item">
+        <div class="demo-img">
+          <img src="./assets/desktop-pet-generator/demo01.png" alt="桌面宠物生成器截图" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="placeholder" style="display:none;">桌面宠物生成器 · 截图暂不可用</div>
+        </div>
+        <div class="demo-body">
+          <h4>桌面宠物生成器</h4>
+          <p>生成可交互的桌面宠物，演示创意与工程结合能力。</p>
+        </div>
+      </div>
+    </div>
+    <div class="demo-note">备注：实习业余个人练习Demo，代码已脱敏开源。</div>
+  </div>
+</section>
+<!-- ========== 5. 测试能力总结 ========== -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">测试能力总结</h2>
+    <div class="skill-grid">
+      <div class="card skill-box">
+        <h4>传统软件测试能力</h4>
+        <ul>
+          <li>黑盒功能测试</li>
+          <li>测试用例设计（等价类、边界值、场景法）</li>
+          <li>冒烟测试、变更回归/全量回归</li>
+          <li>缺陷P0/P1/P2分级、上线保障、线上验证</li>
+          <li>兼容性测试</li>
+          <li>了解Jira/禅道缺陷生命周期</li>
+        </ul>
+      </div>
+      <div class="card skill-box">
+        <h4>AI业务测试专项</h4>
+        <ul>
+          <li>大模型幻觉、输出稳定性、输出格式校验</li>
+          <li>Agent智能体工作流测试</li>
+          <li>问题根因判别：区分用户操作、产品Bug、大模型能力边界</li>
+          <li>BadCase闭环复盘</li>
+        </ul>
+        <div class="tools">
+          <strong>工具技能：</strong>Python基础、Pytest、Git、Postman基础、Linux基础命令
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ========== 6. 页脚 ========== -->
+<footer>
+  <div class="container">
+    <div><a href="https://github.com/your-github" target="_blank" rel="noopener">🔗 GitHub 仓库</a></div>
+    <div class="copy">© 2026 钟莹莹 · 求职作品集 · 仅供校招面试使用</div>
+  </div>
+</footer>
+</body>
+</html>
