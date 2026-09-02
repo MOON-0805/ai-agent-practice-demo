@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>钟莹莹 · AI产品岗作品集</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif;
+    background: #f5f8fc;
+    color: #2b3a4a;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; }
+  /* ===== Hero ===== */
+  .hero {
+    background: linear-gradient(160deg, #ffffff 0%, #eef5fd 60%, #e2effb 100%);
+    text-align: center;
+    padding: 72px 24px 60px;
+    border-bottom: 1px solid #e6eef7;
+  }
+  .hero-inner { max-width: 860px; margin: 0 auto; }
+  .avatar {
+    width: 108px; height: 108px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5aa7e8, #3f8fd0);
+    color: #fff;
+    font-size: 44px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 22px;
+    box-shadow: 0 10px 24px rgba(63,143,208,.25);
+    user-select: none;
+  }
+  .hero h1 { font-size: 40px; font-weight: 700; color: #1f3a57; letter-spacing: 1px; }
+  .hero .intent {
+    margin-top: 10px;
+    font-size: 18px; font-weight: 500; color: #3f8fd0;
+  }
+  .hero .contact {
+    margin-top: 22px;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;
+  }
+  .hero .contact a {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 15px; font-weight: 600;
+    padding: 11px 22px;
+    border-radius: 999px;
+    transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+  .hero .contact a:hover { transform: translateY(-3px); }
+  .btn-mail {
+    background: #3f8fd0; color: #fff;
+    box-shadow: 0 6px 16px rgba(63,143,208,.3);
+  }
+  .btn-mail:hover { background: #2f74b0; box-shadow: 0 10px 22px rgba(63,143,208,.4); }
+  .btn-github {
+    background: #ffffff; color: #1f3a57;
+    border: 2px solid #3f8fd0;
+  }
+  .btn-github:hover { background: #eef5fc; box-shadow: 0 10px 22px rgba(63,143,208,.18); }
+  .hero .intro {
+    margin: 26px auto 0;
+    max-width: 720px;
+    font-size: 16px; color: #41566b;
+    background: rgba(255,255,255,.72);
+    border: 1px solid #e3eef8;
+    border-radius: 14px;
+    padding: 18px 22px;
+    text-align: left;
+  }
+  .hero .tags {
+    margin-top: 24px;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  }
+  .hero .tags .tag {
+    background: #ffffff;
+    border: 1px solid #d8e8f6;
+    color: #2f6fa8;
+    font-size: 13.5px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  /* ===== Section base ===== */
+  .section { max-width: 1060px; margin: 0 auto; padding: 60px 24px 10px; }
+  .section-head {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 30px;
+  }
+  .section-head .bar {
+    width: 5px; height: 26px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #5aa7e8, #3f8fd0);
+  }
+  .section-head h2 { font-size: 26px; font-weight: 700; color: #1f3a57; }
+  .section-head .sub { font-size: 14px; color: #7b90a5; margin-top: 2px; }
+  /* ===== Experience ===== */
+  .exp-card {
+    background: #fff;
+    border: 1px solid #e7eef7;
+    border-radius: 16px;
+    padding: 26px 30px;
+    box-shadow: 0 4px 14px rgba(63,143,208,.06);
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .exp-card:hover { transform: translateY(-5px); box-shadow: 0 14px 30px rgba(63,143,208,.13); }
+  .exp-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; }
+  .exp-head h3 { font-size: 20px; color: #1f3a57; font-weight: 700; }
+  .exp-head .org { color: #3f8fd0; font-weight: 500; }
+  .exp-head .date {
+    font-size: 14px; color: #7b90a5;
+    background: #eef5fc; padding: 4px 12px; border-radius: 999px;
+    white-space: nowrap;
+  }
+  .exp-card ul { margin-top: 18px; padding-left: 20px; }
+  .exp-card li {
+    font-size: 15px; color: #3c5166;
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+  .exp-card li::marker { color: #5aa7e8; }
+  /* ===== Projects ===== */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+  }
+  .proj-card {
+    background: #fff;
+    border: 1px solid #e7eef7;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    box-shadow: 0 4px 14px rgba(63,143,208,.06);
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .proj-card:hover { transform: translateY(-6px); box-shadow: 0 16px 34px rgba(63,143,208,.15); }
+  .proj-body { padding: 22px 22px 6px; }
+  .proj-body h3 { font-size: 18px; color: #1f3a57; font-weight: 700; margin-bottom: 8px; }
+  .proj-body p { font-size: 14.5px; color: #4a5f73; min-height: 60px; }
+  .proj-img-wrap {
+    padding: 12px 22px 6px;
+    display: flex; justify-content: center;
+  }
+  .proj-img {
+    width: 100%;
+    max-width: 460px;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #e7eef7;
+    background: #eef2f6;
+    display: block;
+    margin: 0 auto;
+  }
+  .proj-img-placeholder {
+    width: 100%;
+    max-width: 460px;
+    height: 230px;
+    border-radius: 12px;
+    background: #e8edf2;
+    border: 1px dashed #c9d6e2;
+    display: flex; align-items: center; justify-content: center;
+    color: #8ba0b5;
+    font-size: 15px;
+    margin: 0 auto;
+  }
+  .proj-foot {
+    padding: 14px 22px 22px;
+    margin-top: auto;
+  }
+  .proj-link {
+    display: inline-block;
+    font-size: 14px; font-weight: 600;
+    color: #3f8fd0;
+    border: 1px solid #cfe3f5;
+    padding: 8px 16px;
+    border-radius: 999px;
+    transition: background .25s ease, color .25s ease, border-color .25s ease;
+  }
+  .proj-link:hover { background: #3f8fd0; color: #fff; border-color: #3f8fd0; }
+  /* ===== Docs ===== */
+  .doc-list { display: flex; flex-direction: column; gap: 14px; }
+  .doc-card {
+    background: #fff;
+    border: 1px solid #e7eef7;
+    border-radius: 14px;
+    padding: 16px 22px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px 20px;
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .doc-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(63,143,208,.1); border-color: #cfe3f5; }
+  .doc-left { display: flex; align-items: center; gap: 14px; }
+  .doc-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #e8f2fc, #d5e8f8);
+    color: #3f8fd0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700;
+  }
+  .doc-card h3 { font-size: 16px; color: #1f3a57; font-weight: 600; }
+  .doc-arrow { color: #8ba0b5; font-size: 18px; transition: transform .25s ease, color .25s ease; }
+  .doc-card:hover .doc-arrow { transform: translateX(4px); color: #3f8fd0; }
+  .doc-note {
+    margin-top: 22px;
+    font-size: 14px; color: #7b90a5;
+    background: #eef5fc;
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center;
+  }
+  /* ===== Skills ===== */
+  .skill-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .skill-card {
+    background: #fff;
+    border: 1px solid #e7eef7;
+    border-radius: 16px;
+    padding: 24px 24px 22px;
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .skill-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(63,143,208,.12); }
+  .skill-card .icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #5aa7e8, #3f8fd0);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  .skill-card h3 { font-size: 17px; color: #1f3a57; margin-bottom: 10px; }
+  .skill-card ul { list-style: none; }
+  .skill-card li {
+    font-size: 14.5px; color: #4a5f73;
+    padding: 4px 0 4px 18px; position: relative;
+  }
+  .skill-card li::before {
+    content: "";
+    position: absolute; left: 2px; top: 13px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #8fc3ee;
+  }
+  /* ===== Footer ===== */
+  .footer {
+    margin-top: 70px;
+    background: #eaf2fb;
+    border-top: 1px solid #dceaf7;
+    text-align: center;
+    padding: 40px 24px 46px;
+  }
+  .footer .repo-btn {
+    display: inline-block;
+    background: #3f8fd0;
+    color: #fff;
+    font-size: 15px; font-weight: 600;
+    padding: 11px 26px;
+    border-radius: 999px;
+    transition: background .25s ease, transform .25s ease;
+  }
+  .footer .repo-btn:hover { background: #2f74b0; transform: translateY(-2px); }
+  .footer p { margin-top: 16px; font-size: 13.5px; color: #5f7a92; }
+  .footer .note {
+    display: inline-block;
+    margin-top: 18px;
+    background: #fff;
+    border: 1px solid #d8e8f6;
+    color: #5f7a92;
+    font-size: 13px;
+    padding: 8px 18px;
+    border-radius: 999px;
+  }
+  /* ===== Responsive ===== */
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .skill-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .hero { padding: 52px 18px 44px; }
+    .hero h1 { font-size: 30px; }
+    .hero .intro { font-size: 15px; padding: 15px 16px; }
+    .hero .contact a { width: 100%; justify-content: center; }
+    .section { padding: 44px 18px 6px; }
+    .section-head h2 { font-size: 22px; }
+    .exp-card { padding: 20px 20px; }
+    .exp-head h3 { font-size: 18px; }
+    .proj-img { height: 190px; }
+    .proj-img-placeholder { height: 190px; }
+    .doc-card { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+  <!-- ========== 1. HERO ========== -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="avatar">钟</div>
+      <h1>钟莹莹</h1>
+      <div class="intent">求职意向：AI产品助理 / AI产品经理</div>
+      <div class="contact">
+        <a class="btn-mail" href="mailto:3337996907@qq.com">✉️ 联系邮箱：3337996907@qq.com</a>
+        <a class="btn-github" href="https://github.com/MOON-0805/ai-agent-practice-demo" target="_blank" rel="noopener">GitHub 项目主页 ↗</a>
+      </div>
+      <p class="intro">
+        具备AI智能体平台实战实习经验，熟练掌握AI产品测试、用户需求挖掘、PRD需求文档撰写、用户内容运营与教程产出等全流程能力，拥有完整AI产品落地复盘经验。
+      </p>
+      <div class="tags">
+        <span class="tag">#AI智能体产品</span>
+        <span class="tag">#用户需求分析</span>
+        <span class="tag">#需求文档PRD</span>
+        <span class="tag">#用户内容运营</span>
+        <span class="tag">#大模型产品实践</span>
+      </div>
+    </div>
+  </header>
+  <!-- ========== 2. 实习经历 ========== -->
+  <section class="section">
+    <div class="section-head">
+      <div class="bar"></div>
+      <div>
+        <h2>实习经历</h2>
+        <div class="sub">AI产品运营视角 · 聚焦C端用户与落地优化</div>
+      </div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-head">
+        <h3>AI产品运营实习生 <span class="org">｜ 知道创宇（码上智行科技）</span></h3>
+        <span class="date">2026.07 - 2026.08</span>
+      </div>
+      <ul>
+        <li>聚焦C端小白用户群体，独立完成AI智能体工具的内容策划、选题挖掘与干货推文撰写，产出多篇实操教程类公众号内容；依托社群渠道完成内容分发，精准洞察不同层级用户使用痛点，输出轻量化、可落地的产品操作指引，降低用户上手门槛。</li>
+        <li>建立用户反馈分层判别机制，常态化收集、梳理用户使用问题，精准区分「用户操作误区、产品功能Bug、大模型固有能力局限」三类问题类型，完成需求甄别与筛选，将非产品缺陷类问题沉淀为标准化使用教程，实现用户问题轻量化闭环。</li>
+        <li>深度参与AI智能体落地优化，针对不同业务场景完成Prompt迭代调优与工作流配置优化，独立搭建多套脱敏Agent Demo，持续做效果校验、问题复盘与策略迭代，提升智能体场景适配度与输出质量。</li>
+        <li>全程跟进产品版本迭代流程，持续收集用户体验反馈，沉淀用户分层分析体系、用户问题处理SOP等标准化文档，形成可复用的产品运营方法论，有效优化产品用户使用体验、降低用户咨询成本。</li>
+      </ul>
+    </div>
+  </section>
+  <!-- ========== 3. 项目实践 ========== -->
+  <section class="section">
+    <div class="section-head">
+      <div class="bar"></div>
+      <div>
+        <h2>项目实践 · 个人智能体Demo</h2>
+        <div class="sub">与GitHub仓库一一对应，点击卡片底部可查看源码</div>
+      </div>
+    </div>
+    <div class="grid">
+      <!-- 职业规划智能体 -->
+      <article class="proj-card">
+        <div class="proj-body">
+          <h3>职业规划智能体</h3>
+          <p>基于用户专业背景与兴趣偏好，提供个性化职业方向分析与规划建议，帮助应届生梳理求职路径与能力提升方向。</p>
+        </div>
+        <div class="proj-img-wrap">
+          <img class="proj-img"
+               src="https://raw.githubusercontent.com/MOON-0805/ai-agent-practice-demo/main/assets/career-planner/%E9%A6%96%E9%A1%B51.png"
+               alt="职业规划智能体"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="proj-img-placeholder" style="display:none;">项目截图</div>
+        </div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://github.com/MOON-0805/ai-agent-practice-demo/tree/main/assets/career-planner" target="_blank" rel="noopener">查看源码 ↗</a>
+        </div>
+      </article>
+      <!-- 塔罗占卜智能体 -->
+      <article class="proj-card">
+        <div class="proj-body">
+          <h3>塔罗占卜智能体</h3>
+          <p>趣味交互型智能体，模拟塔罗占卜流程，结合大模型生成解读内容，用于测试大模型角色扮演与多轮对话能力边界。</p>
+        </div>
+        <div class="proj-img-wrap">
+          <img class="proj-img"
+               src="https://raw.githubusercontent.com/MOON-0805/ai-agent-practice-demo/main/assets/tarot-sage/%E9%A6%96%E9%A1%B5.png"
+               alt="塔罗占卜智能体"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="proj-img-placeholder" style="display:none;">项目截图</div>
+        </div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://github.com/MOON-0805/ai-agent-practice-demo/blob/main/assets/tarot-sage/%E9%A6%96%E9%A1%B5.png" target="_blank" rel="noopener">查看源码 ↗</a>
+        </div>
+      </article>
+      <!-- 短视频脚本生成智能体 -->
+      <article class="proj-card">
+        <div class="proj-body">
+          <h3>短视频脚本生成智能体</h3>
+          <p>面向内容创作者，输入主题即可生成结构化短视频脚本，含分镜、口播与运镜建议，验证Prompt结构化输出能力。</p>
+        </div>
+        <div class="proj-img-wrap">
+          <img class="proj-img"
+               src="https://raw.githubusercontent.com/MOON-0805/ai-agent-practice-demo/main/assets/video-script-generator/%E9%A1%B5%E9%9D%A2.png"
+               alt="短视频脚本生成智能体"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="proj-img-placeholder" style="display:none;">项目截图</div>
+        </div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://github.com/MOON-0805/ai-agent-practice-demo/tree/main/assets/video-script-generator" target="_blank" rel="noopener">查看源码 ↗</a>
+        </div>
+      </article>
+      <!-- 桌面宠物生成器 -->
+      <article class="proj-card">
+        <div class="proj-body">
+          <h3>桌面宠物生成器</h3>
+          <p>趣味工具类智能体，通过描述生成个性化桌面宠物形象与设定，探索大模型在轻量娱乐场景下的落地应用。</p>
+        </div>
+        <div class="proj-img-wrap">
+          <img class="proj-img"
+               src="https://raw.githubusercontent.com/MOON-0805/ai-agent-practice-demo/main/assets/desktop-pet-generator/%E9%A1%B5%E9%9D%A21.png"
+               alt="桌面宠物生成器"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="proj-img-placeholder" style="display:none;">项目截图</div>
+        </div>
+        <div class="proj-foot">
+          <a class="proj-link" href="https://github.com/MOON-0805/ai-agent-practice-demo/blob/main/assets/desktop-pet-generator/%E9%A1%B5%E9%9D%A21.png" target="_blank" rel="noopener">查看源码 ↗</a>
+        </div>
+      </article>
+    </div>
+  </section>
+  <!-- ========== 4. 沉淀文档 ========== -->
+  <section class="section">
+    <div class="section-head">
+      <div class="bar"></div>
+      <div>
+        <h2>沉淀文档 · 产品岗重点</h2>
+        <div class="sub">实习过程中的可复用方法论与复盘材料</div>
+      </div>
+    </div>
+    <div class="doc-list">
+      <a class="doc-card" href="https://github.com/MOON-0805/ai-agent-practice-demo/blob/main/docs/user-issue-to-prd-template.md" target="_blank" rel="noopener">
+        <div class="doc-left">
+          <div class="doc-icon">S</div>
+          <h3>AI智能体用户问题处理SOP</h3>
+        </div>
+        <span class="doc-arrow">→</span>
+      </a>
+      <a class="doc-card" href="https://github.com/MOON-0805/ai-agent-practice-demo/blob/main/docs/user-layer-analysis-template.md" target="_blank" rel="noopener">
+        <div class="doc-left">
+          <div class="doc-icon">分</div>
+          <h3>用户分层分析与内容产出模板</h3>
+        </div>
+        <span class="doc-arrow">→</span>
+      </a>
+      <a class="doc-card" href="https://github.com/MOON-0805/ai-agent-practice-demo/blob/main/docs/wechat-tutorial-template.md" target="_blank" rel="noopener">
+        <div class="doc-left">
+          <div class="doc-icon">文</div>
+          <h3>公众号推文产出框架模板</h3>
+        </div>
+        <span class="doc-arrow">→</span>
+      </a>
+      <a class="doc-card" href="https://github.com/MOON-0805/ai-agent-practice-demo/blob/main/docs/ai-product-manual-test-sop.md" target="_blank" rel="noopener">
+        <div class="doc-left">
+          <div class="doc-icon">测</div>
+          <h3>AI产品手工测试SOP</h3>
+        </div>
+        <span class="doc-arrow">→</span>
+      </a>
+      <a class="doc-card" href="https://github.com/MOON-0805/ai-agent-practice-demo/blob/main/docs/intern-summary-star.md" target="_blank" rel="noopener">
+        <div class="doc-left">
+          <div class="doc-icon">ST</div>
+          <h3>STAR实习复盘面试素材</h3>
+        </div>
+        <span class="doc-arrow">→</span>
+      </a>
+    </div>
+    <p class="doc-note">所有文档存放于本仓库 docs 目录，点击跳转 GitHub 在线阅读，为实习过程沉淀复盘材料。</p>
+  </section>
+  <!-- ========== 5. 技能栈 ========== -->
+  <section class="section">
+    <div class="section-head">
+      <div class="bar"></div>
+      <div>
+        <h2>技能栈</h2>
+        <div class="sub">产品 · AI · 工具</div>
+      </div>
+    </div>
+    <div class="skill-grid">
+      <div class="skill-card">
+        <div class="icon">产</div>
+        <h3>产品能力</h3>
+        <ul>
+          <li>需求分析</li>
+          <li>PRD撰写</li>
+          <li>用户分层</li>
+          <li>用户痛点挖掘</li>
+          <li>内容策划</li>
+          <li>迭代跟进</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <div class="icon">AI</div>
+        <h3>AI相关</h3>
+        <ul>
+          <li>AI智能体编排</li>
+          <li>大模型能力边界分析</li>
+          <li>AI产品测试</li>
+          <li>提示词工程</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <div class="icon">具</div>
+        <h3>工具</h3>
+        <ul>
+          <li>GitHub</li>
+          <li>Markdown</li>
+          <li>文档协同</li>
+          <li>低代码智能体平台</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- ========== 6. 页脚 ========== -->
+  <footer class="footer">
+    <a class="repo-btn" href="https://github.com/MOON-0805/ai-agent-practice-demo" target="_blank" rel="noopener">访问 GitHub 仓库 ↗</a>
+    <p>AI产品岗求职作品集 · 个人智能体Demo与实习沉淀文档展示</p>
+    <span class="note">本网页为求职作品集，所有代码文档均已脱敏，不含公司内部涉密信息。</span>
+  </footer>
+</body>
+</html>
